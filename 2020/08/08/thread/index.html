@@ -1,0 +1,528 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>thread | GutsOverFear</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="YanHui">
+    
+
+    
+    <meta name="description" content="一个进程中的多个线程共享以下资源：​    1.可执行的指令​    2.静态数据​    3.进程中打开的文件描述符​    4.当前工作目录​    5.用户ID​    6.用户组ID每个线程私有的资源：​    1.线程ID​    2.PC和相关寄存器​    3.堆栈​    4.错误号（errno）​    5.优先级​    6.执行状态和属性 Pthread线程库：12&lt;创">
+<meta property="og:type" content="article">
+<meta property="og:title" content="thread">
+<meta property="og:url" content="http://yoursite.com/2020/08/08/thread/index.html">
+<meta property="og:site_name" content="GutsOverFear">
+<meta property="og:description" content="一个进程中的多个线程共享以下资源：​    1.可执行的指令​    2.静态数据​    3.进程中打开的文件描述符​    4.当前工作目录​    5.用户ID​    6.用户组ID每个线程私有的资源：​    1.线程ID​    2.PC和相关寄存器​    3.堆栈​    4.错误号（errno）​    5.优先级​    6.执行状态和属性 Pthread线程库：12&lt;创">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/images/%E7%BA%BF%E7%A8%8B1.jpg">
+<meta property="og:image" content="d:/BLOG/source/images/线程1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9F%A5%E7%9C%8B%E7%BA%BF%E7%A8%8B.png">
+<meta property="og:image" content="d:/BLOG/source/images/查看线程.png">
+<meta property="og:image" content="http://yoursite.com/images/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="d:/BLOG/source/images/生产者消费者模型.png">
+<meta property="og:image" content="http://yoursite.com/images/%E4%BA%92%E6%96%A5%E9%94%811.png">
+<meta property="og:image" content="d:/BLOG/source/images/互斥锁1.png">
+<meta property="og:image" content="http://yoursite.com/images/%E4%BA%92%E6%96%A5%E9%94%812.png">
+<meta property="og:image" content="d:/BLOG/source/images/互斥锁2.png">
+<meta property="article:published_time" content="2020-08-08T03:45:38.000Z">
+<meta property="article:modified_time" content="2020-08-08T17:25:37.334Z">
+<meta property="article:author" content="YanHui">
+<meta property="article:tag" content="线程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/%E7%BA%BF%E7%A8%8B1.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="GutsOverFear" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/%02.css">
+<link rel="stylesheet" href="/.css">
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="GutsOverFear" title="GutsOverFear"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="GutsOverFear">GutsOverFear</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/08/08/thread/" title="thread" itemprop="url">thread</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-08T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pthread%E7%BA%BF%E7%A8%8B%E5%BA%93%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">Pthread线程库：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">2.</span> <span class="toc-text">线程间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%EF%BC%88synhcronization%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">同步（synhcronization）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%92%E6%96%A5"><span class="toc-number">2.2.</span> <span class="toc-text">互斥</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%A4%9A%E4%B8%AA%E4%B8%B4%E7%95%8C%E8%B5%84%E6%BA%90"><span class="toc-number">2.2.0.1.</span> <span class="toc-text">多个临界资源</span></a></li></ol></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<p>一个进程中的多个线程共享以下资源：<br>​    1.可执行的指令<br>​    2.静态数据<br>​    3.进程中打开的文件描述符<br>​    4.当前工作目录<br>​    5.用户ID<br>​    6.用户组ID<br>每个线程私有的资源：<br>​    1.线程ID<br>​    2.PC和相关寄存器<br>​    3.堆栈<br>​    4.错误号（errno）<br>​    5.优先级<br>​    6.执行状态和属性</p>
+<h3 id="Pthread线程库："><a href="#Pthread线程库：" class="headerlink" title="Pthread线程库："></a>Pthread线程库：</h3><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;创建线程&gt;</span><br><span class="line">int pthread_create ( pthread_t *thread, <span class="keyword">const</span> pthread_attr_t *attr, void *<span class="comment">(*routine)(void *)</span>, void *arg );</span><br></pre></td></tr></table></figure>
+<p>​    返回值：成功返回0，失败时返回错误码<br>​    thread：线程对象<br>​    attr：线程属性，NULL代表默认属性<br>​    routine：线程执行函数<br>​    arg：传递给routine的参数，没有参数NULL<br>``&gt;` cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;回收线程&gt;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">void</span> **retval )</span></span>;</span><br></pre></td></tr></table></figure>
+<p>​    返回值：成功返回0， 失败时返回错误码<br>​    thread：要回收的线程对象（如果回收的进程没有结束，会调用线程阻塞直到thread结束）<br>​    *retval ：接受线程thread的返回值</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;结束线程&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *retval)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>​    retval可被其他线程通过pthread_join获取<br>​    线程私有资源被释放（所以retval不能为一个局部变量的地址）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="keyword">char</span> message[<span class="number">32</span>] = <span class="string">&quot;hello world&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">thread_func</span><span class="params">(<span class="keyword">void</span> *arg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">thread_func</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">strcpy</span>(message, <span class="string">&quot;marked by thread&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;thank you for waiting for me&quot;</span>;</span><br><span class="line">    <span class="comment">//pthread_exit(&quot;thank you for waiting for me&quot;);</span></span><br><span class="line">    <span class="comment">//这里return和pthread_exit等价</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> a_thread;</span><br><span class="line">    <span class="keyword">void</span> *result;</span><br><span class="line">    <span class="keyword">if</span>(pthread_create(&amp;a_thread, <span class="literal">NULL</span>, thread_func, <span class="literal">NULL</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fail topthread_create&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    pthread_join(a_thread, &amp;result);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;result is %s\n&quot;</span>, result);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;message is %s\n&quot;</span>, message);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/%E7%BA%BF%E7%A8%8B1.jpg"><br><img src="D:\BLOG\source\images\线程1.jpg"></p>
+<h3 id="线程间通信"><a href="#线程间通信" class="headerlink" title="线程间通信"></a>线程间通信</h3><p>线程共享同一进程的地址空间<br>优点：线程间通信很容易（通过全局变量交换数据）<br>缺点：多个线程访问共享时需要同步或互斥机制</p>
+<h4 id="同步（synhcronization）"><a href="#同步（synhcronization）" class="headerlink" title="同步（synhcronization）"></a>同步（synhcronization）</h4><p>：多个任务按照约定的先后次序相互配合完成一件事情。<br>信号量：代表某一类资源，其值表示系统中该资源的数量<br>分类：无名信号量（基于内存的信号量）<br>            有名信号量<br>操作：<br>初始化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_init</span><span class="params">(<span class="keyword">sem_t</span>, <span class="keyword">int</span> pshared, <span class="keyword">unsigned</span> val)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：成功返回0，失败EOF<br>sem：指向要初始化的信号量对象<br>pshared 0-线程间  1-进程间<br>val：信号量的初值<br>P操作（申请资源）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_wait</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：成功返回0，失败EOF<br>V操作（释放资源）<br>int sem_post(sem_t *sem);<br>返回值：成功返回0，失败EOF<br>P(S):<br>if （信号量的值大于）<br>{<br>        申请资源的任务继续运行；<br>        信号量的值减一；<br>}<br>else<br>{<br>        申请资源的任务阻塞；<br>}<br>V(S):<br>信号量的值加一；<br>if（有任务在等待资源）<br>{<br>        唤醒等待任务，让其继续运行；<br>}</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;两个线程同步读写缓冲区（生产者/消费者问题）&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">32</span>];</span><br><span class="line"><span class="keyword">sem_t</span> sem;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">function</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sem_wait(&amp;sem);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;you enter %d characters\n&quot;</span>,<span class="built_in">strlen</span>(buf));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> a_thread;</span><br><span class="line">    <span class="keyword">if</span>(sem_init(&amp;sem, <span class="number">0</span>, <span class="number">0</span>) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;sem_init:&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(pthread_create(&amp;a_thread, <span class="literal">NULL</span>, function, <span class="literal">NULL</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fail to pthread_create&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;input &#x27;quit&#x27; to exit\n&quot;</span>);</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        fgets(buf, <span class="number">32</span>, <span class="built_in">stdin</span>);</span><br><span class="line">        sem_post(&amp;sem);</span><br><span class="line">    &#125;<span class="keyword">while</span>(<span class="built_in">strncmp</span>(buf, <span class="string">&quot;quit&quot;</span>,<span class="number">4</span>) != <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/%E6%9F%A5%E7%9C%8B%E7%BA%BF%E7%A8%8B.png"><br><img src="D:\BLOG\source\images\查看线程.png"><br><img src="/images/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B.png"><br><img src="D:\BLOG\source\images\生产者消费者模型.png"></p>
+<h4 id="互斥"><a href="#互斥" class="headerlink" title="互斥"></a>互斥</h4><p>临界资源：一次只允许一个任务（进程、线程）访问的共享资源<br>临界区：访问临界区的代码<br>互斥机制：<br>mutex互斥锁；<br>任务访问临界资源前申请锁，访问完后释放锁</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;互斥锁初始化&gt;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_init</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex, <span class="keyword">const</span> <span class="keyword">pthread_mutexattr_t</span> *attr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：成功返回0，失败返回错误码<br>mutex 指向要初始化的互斥锁对象<br>attr：互斥锁属性，NULL表示缺醒属性</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;申请锁&gt;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_lock</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：成功返回0，失败返回错误码<br>mutex：指向要初始化的互斥锁对象<br>如果无法获得锁，任务阻塞</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;释放锁&gt;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_unlock</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：成功返回0， 失败返回错误码<br>mutex：指向要初始化的互斥锁对象<br>当前在访问临界资源以前申请锁，申请到锁之后执行临界区，执行完临界区释放锁（如果没有释放锁，会导致其他申请锁的任务一直阻塞）</p>
+<h6 id="多个临界资源"><a href="#多个临界资源" class="headerlink" title="多个临界资源"></a>多个临界资源</h6><pre><code>1.临界资源是同时被访问的，只需要一个锁
+2. 临界资源不同时候被访问，需要多个互斥锁保护临界资源</code></pre>
+<p>（信号量的值为0或者1就可以实现互斥）<br>注意同步和互斥的区别</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">&lt;互斥锁&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> count, value1, value2;</span><br><span class="line"><span class="keyword">pthread_mutex_t</span> lock;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">function</span><span class="params">(<span class="keyword">void</span> *arg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">function</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK__</span></span><br><span class="line">        pthread_mutex_lock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="keyword">if</span>(value1 != value2)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;value1=%dvalue2=%d\n&quot;</span>,value1, value2);</span><br><span class="line">        usleep(<span class="number">100000</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK_    </span></span><br><span class="line">        pthread_mutex_unlock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> thread;</span><br><span class="line">    <span class="keyword">if</span>(pthread_mutex_init(&amp;lock, <span class="literal">NULL</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fail to pthread_mutex_init\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(pthread_create(&amp;thread, <span class="literal">NULL</span>, function, <span class="literal">NULL</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fail to pthread_create\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        count++;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK_</span></span><br><span class="line">        pthread_mutex_lock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        value1 = count;</span><br><span class="line">        value2 = count;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK_</span></span><br><span class="line">        pthread_mutex_unlock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当不用互斥的时候，主线程某个熟客会出现将count赋值给value1后，时间片用完了，执行副线程，会打印value1和value2的值。<br><img src="/images/%E4%BA%92%E6%96%A5%E9%94%811.png"><br><img src="D:\BLOG\source\images\互斥锁1.png"><br>当启用互斥锁之后，在执行主线程时，每一次循环count的值都会分别赋值给它们，副线程是不能够问value1和value2的值的，反之亦然，所以不会打印两个变量的值。<br><img src="/images/%E4%BA%92%E6%96%A5%E9%94%812.png"><br><img src="D:\BLOG\source\images\互斥锁2.png"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/IO%E8%BF%9B%E7%A8%8B/">IO进程</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/线程/">线程</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2020/08/08/thread/" data-title="thread | GutsOverFear" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/08/08/hello-world/" title="Hello World">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Hello World</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/08/08/yanhui/"  title="yanhui">
+ <strong>下一篇：</strong><br/> 
+ <span>yanhui
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pthread%E7%BA%BF%E7%A8%8B%E5%BA%93%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">Pthread线程库：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">2.</span> <span class="toc-text">线程间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%EF%BC%88synhcronization%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">同步（synhcronization）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%92%E6%96%A5"><span class="toc-number">2.2.</span> <span class="toc-text">互斥</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%A4%9A%E4%B8%AA%E4%B8%B4%E7%95%8C%E8%B5%84%E6%BA%90"><span class="toc-number">2.2.0.1.</span> <span class="toc-text">多个临界资源</span></a></li></ol></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IO进程/" title="IO进程">IO进程<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/线程/" title="线程">线程<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="YanHui">YanHui</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
