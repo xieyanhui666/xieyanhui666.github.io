@@ -1,0 +1,539 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>sqlite3 | GutsOverFear</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="YanHui">
+    
+
+    
+    <meta name="description" content="了解ER关系 实体与实体间的关系  实体和属性间的关系   画出ER图，创建表格 表格的每一列称为一个字段  表格的每一行称为一条记录  表格中唯一能找到一条记录的字段叫主键  create table 表名(字段1 约束，字段2 约束，字段3 约束);  操作表格 例：公司员工表格  12员工号 姓名 联系电话 工资 职务         CREATE TABLE employee (id i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sqlite3">
+<meta property="og:url" content="http://yoursite.com/2020/08/08/sqlite3/index.html">
+<meta property="og:site_name" content="GutsOverFear">
+<meta property="og:description" content="了解ER关系 实体与实体间的关系  实体和属性间的关系   画出ER图，创建表格 表格的每一列称为一个字段  表格的每一行称为一条记录  表格中唯一能找到一条记录的字段叫主键  create table 表名(字段1 约束，字段2 约束，字段3 约束);  操作表格 例：公司员工表格  12员工号 姓名 联系电话 工资 职务         CREATE TABLE employee (id i">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-08T03:45:38.000Z">
+<meta property="article:modified_time" content="2020-08-09T06:17:51.132Z">
+<meta property="article:author" content="YanHui">
+<meta property="article:tag" content="sqlite3">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="GutsOverFear" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/%02.css">
+<link rel="stylesheet" href="/.css">
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="GutsOverFear" title="GutsOverFear"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="GutsOverFear">GutsOverFear</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/08/08/sqlite3/" title="sqlite3" itemprop="url">sqlite3</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-08T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<ol>
+<li>了解ER关系<pre><code> 实体与实体间的关系
+ 实体和属性间的关系 </code></pre>
+</li>
+<li>画出ER图，创建表格<pre><code> 表格的每一列称为一个字段
+ 表格的每一行称为一条记录
+ 表格中唯一能找到一条记录的字段叫主键
+ create table 表名(字段1 约束，字段2 约束，字段3 约束);</code></pre>
+</li>
+<li>操作表格<br> 例：公司员工表格</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">员工号 姓名 联系电话 工资 职务 </span><br><span class="line">        <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> employee (<span class="keyword">id</span> <span class="built_in">integer</span> primary <span class="keyword">key</span>, <span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span>, telephone <span class="built_in">text</span>, salary <span class="built_in">integer</span> <span class="keyword">default</span> <span class="number">2000</span>, duty <span class="built_in">text</span> <span class="keyword">default</span> <span class="string">&#x27;normal&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">添加记录</span><br><span class="line">        <span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee (<span class="keyword">id</span>, <span class="keyword">name</span>, telephone, salary, duty) <span class="keyword">values</span>(<span class="number">1</span>, <span class="string">&#x27;zhangSan&#x27;</span>, <span class="string">&#x27;1234567890&#x27;</span>, <span class="number">3400</span>, <span class="string">&#x27;jiaoXueBu&#x27;</span>);</span><br><span class="line">        <span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">values</span>(<span class="number">2</span>, <span class="string">&#x27;zhangSi&#x27;</span>, <span class="string">&#x27;1234567789&#x27;</span>, <span class="number">3500</span>, <span class="string">&#x27;jiaoXueBu&#x27;</span>);</span><br><span class="line">        <span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee ( <span class="keyword">name</span>, telephone, salary)<span class="keyword">values</span>(<span class="string">&#x27;zhangWu&#x27;</span>, <span class="string">&#x27;1234574789&#x27;</span>, <span class="number">3800</span>);</span><br></pre></td></tr></table></figure>
+<pre><code>    //把第一张表中查询到的结果插入到第二张表中</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> 表名 (字段名列表) <span class="keyword">SELECT</span> (字段名列表) <span class="keyword">FROM</span> 表名 [<span class="keyword">WHERE</span> 条件]</span><br><span class="line">        <span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee (<span class="keyword">name</span>) <span class="keyword">SELECT</span> <span class="keyword">name</span> <span class="keyword">FROM</span> student <span class="keyword">WHERE</span> <span class="keyword">id</span> &gt; <span class="number">5</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">name</span>;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">修改</span><br><span class="line">    <span class="keyword">UPDATE</span> employee <span class="keyword">SET</span>  salary = <span class="number">4000</span> <span class="keyword">WHERE</span> <span class="keyword">name</span>=<span class="string">&#x27;zhangSan&#x27;</span> ;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">删除 </span><br><span class="line">        DELETET <span class="keyword">FROM</span> employee  <span class="keyword">WHERE</span> salary &lt; <span class="number">3000</span>;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">查询 </span><br><span class="line">        <span class="keyword">SELECT</span> 字段名  <span class="keyword">FROM</span>  表名 [<span class="keyword">WHERE</span> 条件][<span class="keyword">GROUP</span> <span class="keyword">BY</span> 字段名][<span class="keyword">ORDER</span> <span class="keyword">BY</span> 字段名][<span class="keyword">LIMIT</span> 从第几条开始显示，总共显示几条]</span><br><span class="line">        <span class="keyword">SELECT</span> *  <span class="keyword">FROM</span> employee;</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">name</span>,salary  <span class="keyword">FROM</span> employee;</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">name</span>,salary  <span class="keyword">FROM</span> employee <span class="keyword">WHERE</span> salary &lt; <span class="number">4000</span>;</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">count</span>(*)  <span class="keyword">FROM</span> employee; //总共有几条记录</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">max</span>(salary) <span class="keyword">FROM</span> employee; //求最大值</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">min</span>(salary) <span class="keyword">FROM</span> employee; //求最小值</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">avg</span>(salary) <span class="keyword">FROM</span> employee; //求平均值</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">sum</span>(salary) <span class="keyword">FROM</span> employee; //求和</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>sqlite3相关的API<pre><code> 数据库的操作
+     打开数据库 sqlite3_open
+     操作数据库 sqlite3_get_table / sqlite3_exec
+         返回结果，需要最后释放结果 sqlite3_free_table
+         不返回结果
+     关闭数据库 sqlite3_close</code></pre>
+</li>
+</ol>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> * fileName, sqlite3 ** ppDb)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：打开数据库<br>&ensp;&ensp;&ensp;&ensp;函数参数：<br>&ensp;&ensp;&ensp;&ensp;fileName : 数据库的名字<br>&ensp;&ensp;&ensp;&ensp;ppDb : 传出参数，当打开数据库成功的时候，*ppDb将会指向打开的数据库<br>&ensp;&ensp;&ensp;&ensp;函数返回值：成功时，返回SQLITE_OK，失败时，返回-1；<br>&ensp;&ensp;&ensp;&ensp;main函数调用它的时候，应该sqlite3 *pDb; sqlite3_open(“aa”, &amp;pDb);<br>&ensp;&ensp;&ensp;&ensp;调用该函数成功返回时，pDb这个指针指向被打开的数据库。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_close</span><span class="params">(sqlite3 * pDb)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：关闭数据库<br>&ensp;&ensp;&ensp;&ensp;函数参数： pDb指向打开的数据库<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1；         </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_get_table</span><span class="params">(sqlite3 * pDb, <span class="keyword">const</span> <span class="keyword">char</span> * pSql, <span class="keyword">char</span> *** pResult, <span class="keyword">int</span> * pRow, <span class="keyword">int</span> * pColumn, <span class="keyword">char</span> ** pErrmsg)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：操作数据库，并且返回结果，一般多用于SQL select语句<br>&ensp;&ensp;&ensp;&ensp;函数参数： pDb指向打开的数据库<br>&ensp;&ensp;&ensp;&ensp;pSql : 将要执行的sql语句<br>&ensp;&ensp;&ensp;&ensp;pResult : 指向返回的结果(查询到的结果，是一个二维数组)<br>&ensp;&ensp;&ensp;&ensp;pRow :指向结果的行数<br>&ensp;&ensp;&ensp;&ensp;pColumn : 指向结果的列数<br>&ensp;&ensp;&ensp;&ensp;pErrmsg : 如果执行失败，将会指向出错消息。如果执行失败，需要调用sqlite3_free进行释放<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1； </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_free_table</span><span class="params">(<span class="keyword">char</span> ** pResult)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：操作数据库，并且返回结果，一般多用于SQL select语句<br>&ensp;&ensp;&ensp;&ensp;函数参数：<br>&ensp;&ensp;&ensp;&ensp;pResult : 指向sqlite3_get_table返回的结果(查询到的结果)<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1；     </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_exec</span><span class="params">(sqlite3* pDb, <span class="keyword">const</span> <span class="keyword">char</span> * pSql, <span class="keyword">int</span> (*callback)</span><span class="params">(<span class="keyword">void</span>*, <span class="keyword">int</span>, <span class="keyword">char</span> **, <span class="keyword">char</span> **)</span>, <span class="keyword">void</span> * arg, <span class="keyword">char</span> **pErrmsg)</span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：执行sql语句操作数据库，成功时，调用回调函数。<br>&ensp;&ensp;&ensp;&ensp;函数参数：<br>&ensp;&ensp;&ensp;&ensp;pDb: 指向打开的数据库<br>&ensp;&ensp;&ensp;&ensp; pSql : 将要执行的sql语句<br>&ensp;&ensp;&ensp;&ensp;callback : 执行sql语句成功后将会调用这个回调函数。如果结果中有多行，则每一行调用一次。<br>&ensp;&ensp;&ensp;&ensp;arg :给回调函数传的第一个参数<br>&ensp;&ensp;&ensp;&ensp;pErrmsg : 如果执行失败，将会指向出错消息。如果执行失败，需要调用sqlite3_free进行释放<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1；         </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_free</span><span class="params">(<span class="keyword">char</span> * pErrmsg)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：释放查询/操作数据库返回的错误信息<br>&ensp;&ensp;&ensp;&ensp;函数参数：pErrmsg : 执行sql语句后的出错信息<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1； </p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/sqlite3/">sqlite3</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2020/08/08/sqlite3/" data-title="sqlite3 | GutsOverFear" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/08/08/hello-world/" title="Hello World">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Hello World</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/08/08/thread/"  title="thread">
+ <strong>下一篇：</strong><br/> 
+ <span>thread
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IO进程/" title="IO进程">IO进程<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/sqlite3/" title="sqlite3">sqlite3<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程/" title="线程">线程<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="YanHui">YanHui</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -133,7 +133,7 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2020/08/08/yanhui/" title="yanhui" itemprop="url">yanhui</a>
+      <a href="/2020/08/08/sqlite3/" title="sqlite3" itemprop="url">sqlite3</a>
   </h1>
   <p class="article-author">By
        
@@ -146,7 +146,55 @@
 </header>
     <div class="article-content">
         
-        
+        <ol>
+<li>了解ER关系<pre><code> 实体与实体间的关系
+ 实体和属性间的关系 </code></pre>
+</li>
+<li>画出ER图，创建表格<pre><code> 表格的每一列称为一个字段
+ 表格的每一行称为一条记录
+ 表格中唯一能找到一条记录的字段叫主键
+ create table 表名(字段1 约束，字段2 约束，字段3 约束);</code></pre>
+</li>
+<li>操作表格<br> 例：公司员工表格</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">员工号 姓名 联系电话 工资 职务 </span><br><span class="line">        <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> employee (<span class="keyword">id</span> <span class="built_in">integer</span> primary <span class="keyword">key</span>, <span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span>, telephone <span class="built_in">text</span>, salary <span class="built_in">integer</span> <span class="keyword">default</span> <span class="number">2000</span>, duty <span class="built_in">text</span> <span class="keyword">default</span> <span class="string">&#x27;normal&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">添加记录</span><br><span class="line">        <span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee (<span class="keyword">id</span>, <span class="keyword">name</span>, telephone, salary, duty) <span class="keyword">values</span>(<span class="number">1</span>, <span class="string">&#x27;zhangSan&#x27;</span>, <span class="string">&#x27;1234567890&#x27;</span>, <span class="number">3400</span>, <span class="string">&#x27;jiaoXueBu&#x27;</span>);</span><br><span class="line">        <span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">values</span>(<span class="number">2</span>, <span class="string">&#x27;zhangSi&#x27;</span>, <span class="string">&#x27;1234567789&#x27;</span>, <span class="number">3500</span>, <span class="string">&#x27;jiaoXueBu&#x27;</span>);</span><br><span class="line">        <span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee ( <span class="keyword">name</span>, telephone, salary)<span class="keyword">values</span>(<span class="string">&#x27;zhangWu&#x27;</span>, <span class="string">&#x27;1234574789&#x27;</span>, <span class="number">3800</span>);</span><br></pre></td></tr></table></figure>
+<pre><code>    //把第一张表中查询到的结果插入到第二张表中</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> 表名 (字段名列表) <span class="keyword">SELECT</span> (字段名列表) <span class="keyword">FROM</span> 表名 [<span class="keyword">WHERE</span> 条件]</span><br><span class="line">        <span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee (<span class="keyword">name</span>) <span class="keyword">SELECT</span> <span class="keyword">name</span> <span class="keyword">FROM</span> student <span class="keyword">WHERE</span> <span class="keyword">id</span> &gt; <span class="number">5</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">name</span>;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">修改</span><br><span class="line">    <span class="keyword">UPDATE</span> employee <span class="keyword">SET</span>  salary = <span class="number">4000</span> <span class="keyword">WHERE</span> <span class="keyword">name</span>=<span class="string">&#x27;zhangSan&#x27;</span> ;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">删除 </span><br><span class="line">        DELETET <span class="keyword">FROM</span> employee  <span class="keyword">WHERE</span> salary &lt; <span class="number">3000</span>;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">查询 </span><br><span class="line">        <span class="keyword">SELECT</span> 字段名  <span class="keyword">FROM</span>  表名 [<span class="keyword">WHERE</span> 条件][<span class="keyword">GROUP</span> <span class="keyword">BY</span> 字段名][<span class="keyword">ORDER</span> <span class="keyword">BY</span> 字段名][<span class="keyword">LIMIT</span> 从第几条开始显示，总共显示几条]</span><br><span class="line">        <span class="keyword">SELECT</span> *  <span class="keyword">FROM</span> employee;</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">name</span>,salary  <span class="keyword">FROM</span> employee;</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">name</span>,salary  <span class="keyword">FROM</span> employee <span class="keyword">WHERE</span> salary &lt; <span class="number">4000</span>;</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">count</span>(*)  <span class="keyword">FROM</span> employee; //总共有几条记录</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">max</span>(salary) <span class="keyword">FROM</span> employee; //求最大值</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">min</span>(salary) <span class="keyword">FROM</span> employee; //求最小值</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">avg</span>(salary) <span class="keyword">FROM</span> employee; //求平均值</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">sum</span>(salary) <span class="keyword">FROM</span> employee; //求和</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>sqlite3相关的API<pre><code> 数据库的操作
+     打开数据库 sqlite3_open
+     操作数据库 sqlite3_get_table / sqlite3_exec
+         返回结果，需要最后释放结果 sqlite3_free_table
+         不返回结果
+     关闭数据库 sqlite3_close</code></pre>
+</li>
+</ol>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> * fileName, sqlite3 ** ppDb)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：打开数据库<br>&ensp;&ensp;&ensp;&ensp;函数参数：<br>&ensp;&ensp;&ensp;&ensp;fileName : 数据库的名字<br>&ensp;&ensp;&ensp;&ensp;ppDb : 传出参数，当打开数据库成功的时候，*ppDb将会指向打开的数据库<br>&ensp;&ensp;&ensp;&ensp;函数返回值：成功时，返回SQLITE_OK，失败时，返回-1；<br>&ensp;&ensp;&ensp;&ensp;main函数调用它的时候，应该sqlite3 *pDb; sqlite3_open(“aa”, &amp;pDb);<br>&ensp;&ensp;&ensp;&ensp;调用该函数成功返回时，pDb这个指针指向被打开的数据库。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_close</span><span class="params">(sqlite3 * pDb)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：关闭数据库<br>&ensp;&ensp;&ensp;&ensp;函数参数： pDb指向打开的数据库<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1；         </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_get_table</span><span class="params">(sqlite3 * pDb, <span class="keyword">const</span> <span class="keyword">char</span> * pSql, <span class="keyword">char</span> *** pResult, <span class="keyword">int</span> * pRow, <span class="keyword">int</span> * pColumn, <span class="keyword">char</span> ** pErrmsg)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：操作数据库，并且返回结果，一般多用于SQL select语句<br>&ensp;&ensp;&ensp;&ensp;函数参数： pDb指向打开的数据库<br>&ensp;&ensp;&ensp;&ensp;pSql : 将要执行的sql语句<br>&ensp;&ensp;&ensp;&ensp;pResult : 指向返回的结果(查询到的结果，是一个二维数组)<br>&ensp;&ensp;&ensp;&ensp;pRow :指向结果的行数<br>&ensp;&ensp;&ensp;&ensp;pColumn : 指向结果的列数<br>&ensp;&ensp;&ensp;&ensp;pErrmsg : 如果执行失败，将会指向出错消息。如果执行失败，需要调用sqlite3_free进行释放<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1； </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_free_table</span><span class="params">(<span class="keyword">char</span> ** pResult)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：操作数据库，并且返回结果，一般多用于SQL select语句<br>&ensp;&ensp;&ensp;&ensp;函数参数：<br>&ensp;&ensp;&ensp;&ensp;pResult : 指向sqlite3_get_table返回的结果(查询到的结果)<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1；     </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_exec</span><span class="params">(sqlite3* pDb, <span class="keyword">const</span> <span class="keyword">char</span> * pSql, <span class="keyword">int</span> (*callback)</span><span class="params">(<span class="keyword">void</span>*, <span class="keyword">int</span>, <span class="keyword">char</span> **, <span class="keyword">char</span> **)</span>, <span class="keyword">void</span> * arg, <span class="keyword">char</span> **pErrmsg)</span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：执行sql语句操作数据库，成功时，调用回调函数。<br>&ensp;&ensp;&ensp;&ensp;函数参数：<br>&ensp;&ensp;&ensp;&ensp;pDb: 指向打开的数据库<br>&ensp;&ensp;&ensp;&ensp; pSql : 将要执行的sql语句<br>&ensp;&ensp;&ensp;&ensp;callback : 执行sql语句成功后将会调用这个回调函数。如果结果中有多行，则每一行调用一次。<br>&ensp;&ensp;&ensp;&ensp;arg :给回调函数传的第一个参数<br>&ensp;&ensp;&ensp;&ensp;pErrmsg : 如果执行失败，将会指向出错消息。如果执行失败，需要调用sqlite3_free进行释放<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1；         </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqlite3_free</span><span class="params">(<span class="keyword">char</span> * pErrmsg)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&ensp;&ensp;&ensp;&ensp;函数功能：释放查询/操作数据库返回的错误信息<br>&ensp;&ensp;&ensp;&ensp;函数参数：pErrmsg : 执行sql语句后的出错信息<br>&ensp;&ensp;&ensp;&ensp;函数返回值： 成功时，返回SQLITE_OK，失败时，返回-1； </p>
+
         
         
         <p class="article-more-link">
@@ -156,6 +204,16 @@
     <footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/sqlite3/">sqlite3</a>
+  </div>
 
 </div>
 
@@ -197,7 +255,7 @@
         
         <p>一个进程中的多个线程共享以下资源：<br>​    1.可执行的指令<br>​    2.静态数据<br>​    3.进程中打开的文件描述符<br>​    4.当前工作目录<br>​    5.用户ID<br>​    6.用户组ID<br>每个线程私有的资源：<br>​    1.线程ID<br>​    2.PC和相关寄存器<br>​    3.堆栈<br>​    4.错误号（errno）<br>​    5.优先级<br>​    6.执行状态和属性</p>
 <h3 id="Pthread线程库："><a href="#Pthread线程库：" class="headerlink" title="Pthread线程库："></a>Pthread线程库：</h3><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;创建线程&gt;</span><br><span class="line">int pthread_create ( pthread_t *thread, <span class="keyword">const</span> pthread_attr_t *attr, void *<span class="comment">(*routine)(void *)</span>, void *arg );</span><br></pre></td></tr></table></figure>
-<p>​    返回值：成功返回0，失败时返回错误码<br>​    thread：线程对象<br>​    attr：线程属性，NULL代表默认属性<br>​    routine：线程执行函数<br>​    arg：传递给routine的参数，没有参数NULL<br>``&gt;` cpp</p>
+<p>​    返回值：成功返回0，失败时返回错误码<br>​    thread：线程对象<br>​    attr：线程属性，NULL代表默认属性<br>​    routine：线程执行函数<br>​    arg：传递给routine的参数，没有参数NULL<br>*（void  *arg表示的是传入的参数如果出的是int a，（void *）a ）不能给它取地址。<br>``&gt;` cpp</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;回收线程&gt;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">void</span> **retval )</span></span>;</span><br></pre></td></tr></table></figure>
 <p>​    返回值：成功返回0， 失败时返回错误码<br>​    thread：要回收的线程对象（如果回收的进程没有结束，会调用线程阻塞直到thread结束）<br>​    *retval ：接受线程thread的返回值</p>
 <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;结束线程&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *retval)</span></span>;</span><br></pre></td></tr></table></figure>
@@ -211,9 +269,13 @@
 <p>返回值：成功返回0，失败EOF<br>sem：指向要初始化的信号量对象<br>pshared 0-线程间  1-进程间<br>val：信号量的初值<br>P操作（申请资源）</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_wait</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br></pre></td></tr></table></figure>
 
-<p>返回值：成功返回0，失败EOF<br>V操作（释放资源）<br>int sem_post(sem_t *sem);<br>返回值：成功返回0，失败EOF<br>P(S):<br>if （信号量的值大于）<br>{<br>        申请资源的任务继续运行；<br>        信号量的值减一；<br>}<br>else<br>{<br>        申请资源的任务阻塞；<br>}<br>V(S):<br>信号量的值加一；<br>if（有任务在等待资源）<br>{<br>        唤醒等待任务，让其继续运行；<br>}</p>
+<p>返回值：成功返回0，失败EOF<br>V操作（释放资源）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_post</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：成功返回0，失败EOF</p>
+<p>P(S):<br>if （信号量的值大于0）<br>{<br>        申请资源的任务继续运行；<br>        信号量的值减一；<br>}<br>else<br>{<br>        申请资源的任务阻塞；<br>}<br>V(S):<br>信号量的值加一；<br>if（有任务在等待资源）<br>{<br>        唤醒等待任务，让其继续运行；<br>}</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;两个线程同步读写缓冲区（生产者/消费者问题）&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">32</span>];</span><br><span class="line"><span class="keyword">sem_t</span> sem;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">function</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sem_wait(&amp;sem);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;you enter %d characters\n&quot;</span>,<span class="built_in">strlen</span>(buf));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> a_thread;</span><br><span class="line">    <span class="keyword">if</span>(sem_init(&amp;sem, <span class="number">0</span>, <span class="number">0</span>) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;sem_init:&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(pthread_create(&amp;a_thread, <span class="literal">NULL</span>, function, <span class="literal">NULL</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fail to pthread_create&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;input &#x27;quit&#x27; to exit\n&quot;</span>);</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        fgets(buf, <span class="number">32</span>, <span class="built_in">stdin</span>);</span><br><span class="line">        sem_post(&amp;sem);</span><br><span class="line">    &#125;<span class="keyword">while</span>(<span class="built_in">strncmp</span>(buf, <span class="string">&quot;quit&quot;</span>,<span class="number">4</span>) != <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/images/%E6%9F%A5%E7%9C%8B%E7%BA%BF%E7%A8%8B.png"><br><img src="D:\BLOG\source\images\查看线程.png"><br><img src="/images/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B.png"><br><img src="D:\BLOG\source\images\生产者消费者模型.png"></p>
+<p>用”ps aux -L | grep pc“ 查看线程<br><img src="/images/%E6%9F%A5%E7%9C%8B%E7%BA%BF%E7%A8%8B.png"><br><img src="D:\BLOG\source\images\查看线程.png"><br>./pc<br><img src="/images/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B.png"><br><img src="D:\BLOG\source\images\生产者消费者模型.png"></p>
 <h4 id="互斥"><a href="#互斥" class="headerlink" title="互斥"></a>互斥</h4><p>临界资源：一次只允许一个任务（进程、线程）访问的共享资源<br>临界区：访问临界区的代码<br>互斥机制：<br>mutex互斥锁；<br>任务访问临界资源前申请锁，访问完后释放锁</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;互斥锁初始化&gt;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_init</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex, <span class="keyword">const</span> <span class="keyword">pthread_mutexattr_t</span> *attr)</span></span>;</span><br></pre></td></tr></table></figure>
 
@@ -223,12 +285,13 @@
 <p>返回值：成功返回0，失败返回错误码<br>mutex：指向要初始化的互斥锁对象<br>如果无法获得锁，任务阻塞</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;释放锁&gt;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_unlock</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
 
-<p>返回值：成功返回0， 失败返回错误码<br>mutex：指向要初始化的互斥锁对象<br>当前在访问临界资源以前申请锁，申请到锁之后执行临界区，执行完临界区释放锁（如果没有释放锁，会导致其他申请锁的任务一直阻塞）</p>
+<p>返回值：成功返回0， 失败返回错误码<br>mutex：指向要初始化的互斥锁对象</p>
+<p>当前在访问临界资源以前申请锁，申请到锁之后执行临界区，执行完临界区释放锁（如果没有释放锁，会导致其他申请锁的任务一直阻塞）</p>
 <h6 id="多个临界资源"><a href="#多个临界资源" class="headerlink" title="多个临界资源"></a>多个临界资源</h6><pre><code>1.临界资源是同时被访问的，只需要一个锁
 2. 临界资源不同时候被访问，需要多个互斥锁保护临界资源</code></pre>
 <p>（信号量的值为0或者1就可以实现互斥）<br>注意同步和互斥的区别</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">&lt;互斥锁&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> count, value1, value2;</span><br><span class="line"><span class="keyword">pthread_mutex_t</span> lock;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">function</span><span class="params">(<span class="keyword">void</span> *arg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">function</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK__</span></span><br><span class="line">        pthread_mutex_lock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="keyword">if</span>(value1 != value2)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;value1=%dvalue2=%d\n&quot;</span>,value1, value2);</span><br><span class="line">        usleep(<span class="number">100000</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK_    </span></span><br><span class="line">        pthread_mutex_unlock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> thread;</span><br><span class="line">    <span class="keyword">if</span>(pthread_mutex_init(&amp;lock, <span class="literal">NULL</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fail to pthread_mutex_init\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(pthread_create(&amp;thread, <span class="literal">NULL</span>, function, <span class="literal">NULL</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fail to pthread_create\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        count++;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK_</span></span><br><span class="line">        pthread_mutex_lock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        value1 = count;</span><br><span class="line">        value2 = count;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK_</span></span><br><span class="line">        pthread_mutex_unlock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当不用互斥的时候，主线程某个熟客会出现将count赋值给value1后，时间片用完了，执行副线程，会打印value1和value2的值。<br><img src="/images/%E4%BA%92%E6%96%A5%E9%94%811.png"><br><img src="D:\BLOG\source\images\互斥锁1.png"><br>当启用互斥锁之后，在执行主线程时，每一次循环count的值都会分别赋值给它们，副线程是不能够问value1和value2的值的，反之亦然，所以不会打印两个变量的值。<br><img src="/images/%E4%BA%92%E6%96%A5%E9%94%812.png"><br><img src="D:\BLOG\source\images\互斥锁2.png"></p>
+<p>当不用互斥的时候，主线程某个时刻会出现将count赋值给value1后，时间片用完了，执行副线程，会打印value1和value2的值。<br><img src="/images/%E4%BA%92%E6%96%A5%E9%94%811.png"><br><img src="D:\BLOG\source\images\互斥锁1.png"><br>当启用互斥锁之后，在执行主线程时，每一次循环count的值都会分别赋值给它们，副线程是不能够问value1和value2的值的，反之亦然，所以不会打印两个变量的值。<br><img src="/images/%E4%BA%92%E6%96%A5%E9%94%812.png"><br><img src="D:\BLOG\source\images\互斥锁2.png"></p>
 
         
         
@@ -249,6 +312,55 @@
   
   <span></span> <a href="/tags/线程/">线程</a>
   </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/08/08/yanhui/" title="yanhui" itemprop="url">yanhui</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-08T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
 
 </div>
 
@@ -341,6 +453,10 @@
 			<li><a href="/categories/IO进程/" title="IO进程">IO进程<sup>1</sup></a></li>
 		  
 		
+		  
+			<li><a href="/categories/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+		  
+		
 		</ul>
 </div>
 
@@ -349,6 +465,10 @@
 <div class="tagslist">
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/sqlite3/" title="sqlite3">sqlite3<sup>1</sup></a></li>
+			
 		
 			
 				<li><a href="/tags/线程/" title="线程">线程<sup>1</sup></a></li>
