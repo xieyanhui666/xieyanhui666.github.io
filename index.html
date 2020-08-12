@@ -41,10 +41,6 @@
       
 <div>
 		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="晏辉的技术小栈" title="晏辉的技术小栈"/></a>
-			</div>
-			
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="晏辉的技术小栈">晏辉的技术小栈</a></h1>
 				<h2 class="blog-motto"></h2>
@@ -83,20 +79,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2020/08/08/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2020/08/12/STM32-M0/" title="STM32-M0的开发" itemprop="url">STM32-M0的开发</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
 		
   <p class="article-time">
-    <time datetime="2020-08-08T03:45:54.000Z" itemprop="datePublished"> 发表于 2020-08-08</time>
+    <time datetime="2020-08-12T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-12</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <pre><code>欢迎来到jack-hui的博客！</code></pre>
+        <p>Cortex-M系列处理器使用16位Thumb指令集。</p>
+<p>两种工作模式：</p>
+<ol>
+<li>线程模式（Thread）</li>
+<li>处理模式（Handler）：发生中断或异常的时候</li>
+</ol>
+<p>下载软件和文档：<a target="_blank" rel="noopener" href="https://www.stmcu.com.cn/">https://www.stmcu.com.cn/</a> （ST中文官方网站）</p>
+<p>STM32芯片命名规则：</p>
+<p><img src="note.assets/image-20200804093003894.png" alt="image-20200804093003894"></p>
+<p>STM32F0芯片架构</p>
+<p><img src="note.assets/image-20200804101706754.png" alt="image-20200804101706754"></p>
+<p>Cortex-M核心架构</p>
+<p><img src="note.assets/image-20200804101822751.png" alt="image-20200804101822751"></p>
+<p>芯片文档：</p>
+<ul>
+<li><p>参考手册：描述外设控制寄存器相关信息。（平台软件工程师）</p>
+</li>
+<li><p>数据手册：描述芯片硬件相关信息。（硬件工程师）</p>
+</li>
+<li><p>勘误手册：描述芯片已知问题和规避方法。</p>
+</li>
+<li><p>编程手册：描述CPU通用寄存器，指令集，核心外设。（平台软件工程师）</p>
+</li>
+<li><p>应用笔记：描述芯片具体功能的使用方法。（平台软件工程师）</p>
+</li>
+<li><p>HAL库用户手册：描述HAL和LL库的函数接口（平台软件工程师）</p>
+</li>
+</ul>
+<p>编程方法：</p>
+<ul>
+<li>寄存器编程：运行效率最高，编程效率低，可移植性最差</li>
+<li>标准外设库：稳定，效率比较高，编程效率一般，支持芯片有限，不支持新版本芯片，可移植性较差，已经过时了。</li>
+<li>HAL/LL库：ST公司主推的函数库，可以使用图形化配置，可移植性较好，性能和稳定性相对较差。</li>
+</ul>
+<p>开发环境搭建：</p>
+<ol>
+<li>JRE1.8</li>
+<li>STM32CubeMX（Java开发，生成项目框架和初始化代码）</li>
+<li>安装HAL库（在线安装）</li>
+<li>安装MDK</li>
+<li>安装MDK pack包（STM32F0）</li>
+<li>安装ST-Link驱动</li>
+</ol>
+<p>配置CubeMX</p>
+<ol>
+<li>在help菜单钟选择updater settings</li>
+</ol>
+<p><img src="note.assets/image-20200804113714537.png" alt="image-20200804113714537"></p>
+<ol start="2">
+<li>Repository目录中不能出现中文，如果有中文需要修改目录。</li>
+</ol>
+<p><img src="note.assets/image-20200804113847723.png" alt="image-20200804113847723"></p>
 
         
         
@@ -107,6 +154,16 @@
     <footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/ARM/">ARM</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/M0/">M0</a>
+  </div>
 
 </div>
 
@@ -133,20 +190,158 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2020/08/08/yanhui/" title="yanhui" itemprop="url">yanhui</a>
+      <a href="/2020/08/12/process/" title="process" itemprop="url">process</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
 		
   <p class="article-time">
-    <time datetime="2020-08-08T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-08</time>
+    <time datetime="2020-08-12T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-12</time>
     
   </p>
 </header>
     <div class="article-content">
         
+        <h3 id="orgin："><a href="#orgin：" class="headerlink" title="orgin："></a>orgin：</h3><p>多任务编程：通俗的讲，用户可以在同一时间运行多个应用程序（实际是并发）。多任务操作系统使用某种调度策略支持多个任务并发执行。<br>任务：每个正在执行的应用程序，任务是一个逻辑概念，指由软件完成的活动，或者是为实现某个目的一系列操作。通常一个任务是一个程序的一次运行，一个任务包含一个或者多个完成独立功能的子任务，这个独立的子任务是进程或者线程。</p>
+<h3 id="why："><a href="#why：" class="headerlink" title="why："></a>why：</h3><p>&ensp;&ensp;&ensp;&ensp;每个应用程序的都可以运行很多次，有多个实例，再用程序去描述程序会显得不合适。<br>&ensp;&ensp;&ensp;&ensp;进程和程序的区别：<br>    程序是静态的代码，是保存在非易失性存储器上的指令和数据的有序集合，没有执行概念。<br>    进程是一个动态的，包括了动态的创建、调度、执行、消亡的整个过程。</p>
+<h3 id="how"><a href="#how" class="headerlink" title="how:"></a>how:</h3><p>&ensp;&ensp;&ensp;&ensp;进程是具有相对独立功能的程序在特定数据集合上动态执行的过程。</p>
+<h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><p>：<br>交互式进程：shell命令进程、文本编辑器和图形应用程序运行<br>批处理进程：编译器的编译操作、数据库搜索引擎<br>守护进程：   （一直在后台运行，不与任何终端的不关联) 系统进程</p>
+<h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><p>并发性:系统中多个进程可以同时并发执行，相互之间不受干扰<br>动态性：进程都有完整的生命周期，而且在进程的生命周期内，进程的状态是不断变化的，进程具有动态的地址空间（代码、数据、进程控制块）。<br>交互性：指的是进程间直接和间接的通信<br>独立性：进程是资源分配和调度的基本单位，各个进程的地址空间是相互独立的。<br>主要的状态：<br><img src="/images/%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81.png"><br><img src="D:\BLOG\source\images\进程的状态.png"></p>
+<h3 id="what"><a href="#what" class="headerlink" title="what:"></a>what:</h3><h4 id="进程的使用"><a href="#进程的使用" class="headerlink" title="进程的使用"></a>进程的使用</h4><h5 id="进程的创建："><a href="#进程的创建：" class="headerlink" title="进程的创建："></a>进程的创建：</h5><p>pid_t fork（void）;（子进程没有执行fork’函数从fork函数调用的下一条语句开始执行）</p>
+<p>vfork（）<br>fork和vfork的异同：</p>
+<p>clone<br>system<br>getpid（）获取当前进程进程号</p>
+<h5 id="exec函数族："><a href="#exec函数族：" class="headerlink" title="exec函数族："></a>exec函数族：</h5><p>1.重生<br>2.执行新的程序</p>
+<h5 id="进程的终止"><a href="#进程的终止" class="headerlink" title="进程的终止:"></a>进程的终止:</h5><p>void exit(int status);<br>void _exit(int status);<br>status:传递进程结束时的状态。一般来说，0表示正常结束，其它数值表示出现了错误，进程非正常结束。<br>exit()—-清除缓冲<br>_exit()——不会清除缓冲</p>
+<h5 id="wait函数族：防止产生僵尸进程"><a href="#wait函数族：防止产生僵尸进程" class="headerlink" title="wait函数族：防止产生僵尸进程"></a>wait函数族：防止产生僵尸进程</h5><p>pid_t wait(int *status);<br>pid_t waitpid(pid_t pid, int *status, int options);<br>int options:WNOHANG:若指定的进程没有结束，则waitpid不阻塞而里即返回，此时返回值为0；WUNTRACED:为了实现某种操作，由pid指定的任一子进程已被暂停，且其状态自暂停以来还未报告过，则返回其状态。</p>
+<h4 id="进程间的通信"><a href="#进程间的通信" class="headerlink" title="进程间的通信"></a>进程间的通信</h4><h5 id="早起UNIX进程间通信方式"><a href="#早起UNIX进程间通信方式" class="headerlink" title="早起UNIX进程间通信方式"></a>早起UNIX进程间通信方式</h5><p>无名管道（pipe）<br>有名管道（fifo）<br>信号（signal）</p>
+<h5 id="System-V-IPC"><a href="#System-V-IPC" class="headerlink" title="System V IPC"></a>System V IPC</h5><p>共享内存（share memory）<br>消息队列（message queue）<br>信号灯集（semaphore set）</p>
+<h5 id="套接字（socket）"><a href="#套接字（socket）" class="headerlink" title="套接字（socket）"></a>套接字（socket）</h5><h5 id="POSIX进程间通信机制"><a href="#POSIX进程间通信机制" class="headerlink" title="POSIX进程间通信机制"></a>POSIX进程间通信机制</h5><p>POSIX消息队列<br>POSIX信号量<br>POSIX共享内存区 </p>
+
         
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/IO%E8%BF%9B%E7%A8%8B/">IO进程</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/进程/">进程</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/08/12/平台设备驱动框架/" title="平台设备框架" itemprop="url">平台设备框架</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-12T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>平台设备框架<br>   设备–硬件（LED 鼠标 键盘 窗口）—》hello.ko<br>  驱动–软件—》driver.ko<br>  使用虚拟总线将设备和它的驱动程序关联起来。虚拟总线称为platform<br>  将挂载在虚拟总线上的设备称为platform_device<br>  将挂载在虚拟总线上的驱动称为platform_driver<br>  当在linux系统中注册一个设备时，会通过虚拟总线去找与之匹配的驱动程序。<br>  当在linux系统中注册一个驱动程序时，会通过虚拟总线去找与之匹配的设备。<br>  初始化流程：—》helloModule<br>         {<br>         1 注册平台设备platform_device_register(struct platform_device * )<br>            (将设备挂载到平台总线上)<br>          2 注册平台驱动platform_driver_register(struct platform_driver *)<br>          （将驱动程序挂载到平台总线上）<br>         }<br>   exit:—》helloExit<br>        {<br>         1 去注册平台驱动platform_driver_unregister(struct platform_driver *)<br>         2 去注册平台设备platform_device_unregister(struct platform_device *)<br>        }<br>   struct platform_device  platformDevice;//定义一个平台设备<br>   ={  .name=”hello_platform”，平台设备名称<br>          .dev={<br>                  .release=HelloPlatformRelease,//当设备被去注册的时候被调用<br>                    }<br>          .resource = res,<br>     }<br>    struct resource  res[]={<br>        {<br>    .start=0x1c081ffc,<br>                 .end=0x1c081fff,<br>    .flags=IORESOURCE_MEM,<br>        }<br>       {<br>                  .start=11,<br>                  .flags=IORESOURCE_IRQ,<br>       }<br>}<br> struct platform_driver  platformDriver;//定义一个平台驱动<br>     ={<br>        .probe=helloProbe():探测该驱动对应的设备有没有<br>        .remove=helloRemove();移除平台设备<br>       .driver={<br>                    .name=”hello_platform”;<br>                    .owner=THIS_MODULE;<br>                    }<br>      }<br>    平台设备代码和平台驱动代码分离</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">&lt;platform_device&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kdev_t.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/cdev.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/uaccess.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/device.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/sched.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/poll.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/slab.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/platform_device.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void HelloRelease(struct device *dev)</span><br><span class="line">&#123;</span><br><span class="line">    printk(<span class="string">&quot;into hellorelease ------\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">    printk(<span class="string">&quot;exit hellorelease-------\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct resource res[]=</span><br><span class="line">&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        .start = <span class="number">0x1c081ffc</span>,</span><br><span class="line">        .end = <span class="number">0x1c081fff</span>,</span><br><span class="line">        .flags = IORESOURCE_MEM,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        .start = <span class="number">11</span>,</span><br><span class="line">        .flags =IORESOURCE_IRQ,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">struct platform_device platformDevice =</span><br><span class="line">&#123;</span><br><span class="line">    .name = <span class="string">&quot;hello_platform&quot;</span>,</span><br><span class="line">    .dev = &#123;</span><br><span class="line">        .release = HelloRelease,</span><br><span class="line">    &#125;,</span><br><span class="line">    .resource = res,</span><br><span class="line">&#125;<span class="comment">;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> HelloModule(void)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> ret=<span class="number">-1</span><span class="comment">;</span></span><br><span class="line">    printk(<span class="string">&quot;enter hello module into...\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">    printk(<span class="string">&quot;res[0].start=%x,res[0].end=%x,res[1].start=%d\r\n&quot;</span>,res[<span class="number">0</span>].start,res[<span class="number">0</span>].end,res[<span class="number">1</span>].start)<span class="comment">;</span></span><br><span class="line">    ret=platform_device_register(&amp;platformDevice)<span class="comment">;</span></span><br><span class="line">     <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line">     &#123;</span><br><span class="line">         printk(<span class="string">&quot;register platform device error\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">         <span class="keyword">return</span> ret<span class="comment">;</span></span><br><span class="line">     &#125;</span><br><span class="line">   </span><br><span class="line">   printk(<span class="string">&quot;exit hello module----\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">  </span><br><span class="line">    printk(<span class="string">&quot;res[0].start=%x,res[0].end=%x,res[1].start=%d\r\n&quot;</span>,res[<span class="number">0</span>].start,res[<span class="number">0</span>].end,res[<span class="number">1</span>].start)<span class="comment">;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span><span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void HelloExit(void)</span><br><span class="line">&#123;</span><br><span class="line">    printk(<span class="string">&quot;exit hello module into...\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">    platform_device_unregister(&amp;platformDevice)<span class="comment">;</span></span><br><span class="line">    printk(<span class="string">&quot;exit hello module exit\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(HelloModule)<span class="comment">;</span></span><br><span class="line">module_exit(HelloExit)<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;xieyanhui&quot;</span>)<span class="comment">;</span></span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;test module insmod and rmmod&quot;</span>)<span class="comment">;</span></span><br><span class="line">MODULE_ALIAS(<span class="string">&quot;hehe&quot;</span>)<span class="comment">;</span></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">&lt;platform_deiver&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kdev_t.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/cdev.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/uaccess.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/device.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/sched.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/poll.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/slab.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/platform_device.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> HelloProbe(struct platform_device *pDevTmp)</span><br><span class="line">&#123;</span><br><span class="line">    struct resource *pRes=<span class="literal">NULL</span><span class="comment">;</span></span><br><span class="line">    printk(<span class="string">&quot;into helloprobe------\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">   <span class="keyword">if</span>(<span class="literal">NULL</span>==pDevTmp || <span class="literal">NULL</span>==pDevTmp-&gt;resource)</span><br><span class="line">   &#123;</span><br><span class="line">       printk(<span class="string">&quot;no resource\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">       <span class="keyword">return</span> <span class="number">-1</span><span class="comment">;</span></span><br><span class="line">   &#125;</span><br><span class="line">   pRes=pDevTmp-&gt;resource<span class="comment">;</span></span><br><span class="line">   <span class="keyword">if</span>(pRes[<span class="number">0</span>].flags&amp;IORESOURCE_MEM)</span><br><span class="line">   &#123;</span><br><span class="line">       printk(<span class="string">&quot;mem start:%x,mem end:%x\r\n&quot;</span>,pRes[<span class="number">0</span>].start,pRes[<span class="number">0</span>].end)<span class="comment">;</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span>(pRes[<span class="number">1</span>].flags&amp;IORESOURCE_IRQ)</span><br><span class="line">   &#123;</span><br><span class="line">       printk(<span class="string">&quot;irq start:%d\r\n&quot;</span>,pRes[<span class="number">1</span>].start)<span class="comment">;</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">    printk(<span class="string">&quot;exit helloprobe------\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span><span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> HelloRemove(struct platform_device *pDevTmp)</span><br><span class="line">&#123;</span><br><span class="line">    printk(<span class="string">&quot;into helloremove------\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">    printk(<span class="string">&quot;exit helooremove------\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span><span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct platform_driver platformDriver=</span><br><span class="line">&#123;</span><br><span class="line">    .probe = HelloProbe,</span><br><span class="line">    .remove = HelloRemove,</span><br><span class="line">    .driver = &#123;</span><br><span class="line">        .name = <span class="string">&quot;hello_platform&quot;</span>,</span><br><span class="line">        .owner = THIS_MODULE,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;<span class="comment">;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> HelloModule(void)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> ret=<span class="number">-1</span><span class="comment">;</span></span><br><span class="line">    printk(<span class="string">&quot;enter driver module into...\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">   ret=platform_driver_register(&amp;platformDriver)<span class="comment">;</span></span><br><span class="line">   <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line">   &#123;</span><br><span class="line">       printk(<span class="string">&quot;register platform driver error\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">       <span class="keyword">return</span> <span class="number">-1</span><span class="comment">;</span></span><br><span class="line">   &#125;</span><br><span class="line">   printk(<span class="string">&quot;exit driver module----\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span><span class="comment">;  </span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void HelloExit(void)</span><br><span class="line">&#123;</span><br><span class="line">    printk(<span class="string">&quot;exit driver module into...\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">    platform_driver_unregister(&amp;platformDriver)<span class="comment">;</span></span><br><span class="line">    printk(<span class="string">&quot;exit driver module exit\r\n&quot;</span>)<span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(HelloModule)<span class="comment">;</span></span><br><span class="line">module_exit(HelloExit)<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;xieyanhui&quot;</span>)<span class="comment">;</span></span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;test module insmod and rmmod&quot;</span>)<span class="comment">;</span></span><br><span class="line">MODULE_ALIAS(<span class="string">&quot;hehe&quot;</span>)<span class="comment">;</span></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/">驱动开发</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/平台设备/">平台设备</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/08/08/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-08T03:45:54.000Z" itemprop="datePublished"> 发表于 2020-08-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>欢迎来到jack-hui的博客！</code></pre>
+
         
         
         <p class="article-more-link">
@@ -340,7 +535,8 @@
 2. 临界资源不同时候被访问，需要多个互斥锁保护临界资源</code></pre>
 <p>（信号量的值为0或者1就可以实现互斥）<br>注意同步和互斥的区别</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">&lt;互斥锁&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> count, value1, value2;</span><br><span class="line"><span class="keyword">pthread_mutex_t</span> lock;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">function</span><span class="params">(<span class="keyword">void</span> *arg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">function</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK__</span></span><br><span class="line">        pthread_mutex_lock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="keyword">if</span>(value1 != value2)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;value1=%dvalue2=%d\n&quot;</span>,value1, value2);</span><br><span class="line">        usleep(<span class="number">100000</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK_    </span></span><br><span class="line">        pthread_mutex_unlock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> thread;</span><br><span class="line">    <span class="keyword">if</span>(pthread_mutex_init(&amp;lock, <span class="literal">NULL</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fail to pthread_mutex_init\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(pthread_create(&amp;thread, <span class="literal">NULL</span>, function, <span class="literal">NULL</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fail to pthread_create\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        count++;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK_</span></span><br><span class="line">        pthread_mutex_lock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        value1 = count;</span><br><span class="line">        value2 = count;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LOCK_</span></span><br><span class="line">        pthread_mutex_unlock(&amp;lock);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当不用互斥的时候，主线程某个时刻会出现将count赋值给value1后，时间片用完了，执行副线程，会打印value1和value2的值。<br><img src="/images/%E4%BA%92%E6%96%A5%E9%94%811.png"><br><img src="D:\BLOG\source\images\互斥锁1.png"><br>当启用互斥锁之后，在执行主线程时，每一次循环count的值都会分别赋值给它们，副线程是不能够问value1和value2的值的，反之亦然，所以不会打印两个变量的值。<br><img src="/images/%E4%BA%92%E6%96%A5%E9%94%812.png"><br><img src="D:\BLOG\source\images\互斥锁2.png"></p>
+<p>当不用互斥的时候，主线程某个时刻会出现将count赋值给value1后，时间片用完了，执行副线程，会打印value1和value2的值。<br><img src="/images/%E4%BA%92%E6%96%A5%E9%94%811.png"><br><img src="D:\BLOG\source\images\互斥锁1.png"><br>当启用互斥锁之后，在执行主线程时，每一次循环count的值都会分别赋值给它们，副线程是不能够问value1和value2的值的，反之亦然，所以不会打印两个变量的值。</p>
+<p><img src="/images/%E4%BA%92%E6%96%A5%E9%94%812.png"></p>
 
         
         
@@ -361,6 +557,56 @@
   
   <span></span> <a href="/tags/线程/">线程</a>
   </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/08/08/yanhui/" title="yanhui" itemprop="url">yanhui</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-08T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>半角空格: &ensp;或 &#8194;<br>全角空格: &emsp;或 &#8195;<br>不换行空格: &nbsp;或 &#160;</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
 
 </div>
 
@@ -450,11 +696,19 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/IO进程/" title="IO进程">IO进程<sup>1</sup></a></li>
+			<li><a href="/categories/ARM/" title="ARM">ARM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/IO进程/" title="IO进程">IO进程<sup>2</sup></a></li>
 		  
 		
 		  
 			<li><a href="/categories/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/驱动开发/" title="驱动开发">驱动开发<sup>1</sup></a></li>
 		  
 		
 		</ul>
@@ -467,11 +721,23 @@
 		<ul class="clearfix">
 		
 			
+				<li><a href="/tags/M0/" title="M0">M0<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/进程/" title="进程">进程<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/sqlite3/" title="sqlite3">sqlite3<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/线程/" title="线程">线程<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/平台设备/" title="平台设备">平台设备<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -484,7 +750,7 @@
         
           <li>
             
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            	<a href="https://niuniu-zhang.top/ 一个面向程序员交流分享的新一代社区" target="_blank" title="NiuNiu">NiuNiu</a>
             
           </li>
         
