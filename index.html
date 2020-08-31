@@ -92,7 +92,16 @@
 </header>
     <div class="article-content">
         
-        <p>why<br>    在做智能冰箱的项目中，A9板作为服务器来控制M0板上的硬件，A9板和M0板用串口相连。</p>
+        <h2 id="系统移植的知识点："><a href="#系统移植的知识点：" class="headerlink" title="系统移植的知识点："></a>系统移植的知识点：</h2><h4 id="linux系统的启动流程"><a href="#linux系统的启动流程" class="headerlink" title="linux系统的启动流程"></a>linux系统的启动流程</h4><p>1.计算机硬件启动<br>2.引导加载程序<br>3.启动引导内核</p>
+<h4 id="uboot的启动流程"><a href="#uboot的启动流程" class="headerlink" title="uboot的启动流程"></a>uboot的启动流程</h4><p><img src="/images/ubootstart.png"><br><img src="D:\BLOG\source\images\ubootstart.png"><br><img src="/images/uboot.jpg"><br><img src="D:\BLOG\source\images\uboot.jpg"><br>在uboot移植配置的是bl2.</p>
+<h4 id="设备树"><a href="#设备树" class="headerlink" title="设备树"></a>设备树</h4><p>&amp;ensp&amp;ensp在内核里有一个结构“struct machine_desc”，内核用这个结构表示一个实际存在的板子，而针对每个板子都会有一个文件定义这个结构体，这个文件叫平台代码。</p>
+<p>&amp;ensp&amp;enspdevice Tree是一种描述硬件的数据结构，它起源于OpenFirmware（OF）。Device Tree 由一系列被命令的节点（node）和属性（property）组成，而结点本身可包含子节点。所谓属性，就是成对出现的name和value。在Device Tree中，描述的信息包括（hard code（硬编码） 到kernel中）：<br>1.CPU的数量和类别<br>2.内存基地址和大小<br>3.总线和桥<br>4.外设连接<br>5.中断控制器和中断使用情况<br>6.GPIO控制器和GPIO使用情况<br>7.clock控制器和clock使用情况<br>DTS<br>&amp;ensp&amp;ensp.dts我呢见是一种ASCII文本格式的Device Tree 描述，此文本格式非常人性化，适合人类的阅读习惯。一个.dts文件对应一个ARM的machine，一般放置在内核的arch/arm/boot/dts目录下。<br>&amp;ensp&amp;ensp由于SOC可能对应多个machine（一个SOC可以对应多个产品和电路板），势必这些dts文件需包含许多个共同的部分，linux内核为了简化，把SOc公用的部分或者多个machine共同部分一般提炼为.dtsi，类似c语言的头文件。</p>
+<h4 id="tftp-nfs"><a href="#tftp-nfs" class="headerlink" title="tftp nfs"></a>tftp nfs</h4><p>：<br>tftp用来加载内核和设备树；nfs用来挂载文件系统。<br>内核的移植：<br>配置内核，选择CPU和开发板</p>
+<h4 id="根文件系统"><a href="#根文件系统" class="headerlink" title="根文件系统"></a>根文件系统</h4><p>制作：busybox<br>根文件系统（root filesysytem）是存放运行、维护系统所必须的各种工具软件、库文件、脚本、配置文件和其他特殊文件的地方，也可以安装各种软件包。<br><img src="/images/%E6%96%87%E4%BB%B6%E4%BD%9C%E7%94%A8.png"><br><img src="D:\BLOG\source\images\文件作用.png"></p>
+<h5 id="linux设备文件"><a href="#linux设备文件" class="headerlink" title="linux设备文件"></a>linux设备文件</h5><p>&amp;ensp&amp;ensp在linux中由字符设备文件和块设备文件。<br>Linux系统是通过主设备和次设备好来区分设备的；<br>主设备号：（major） 用来区分哪类设备<br>次设备号：（minor）区分某类设备中的哪个设备</p>
+<h4 id="配置、编译的命令"><a href="#配置、编译的命令" class="headerlink" title="配置、编译的命令"></a>配置、编译的命令</h4><p>make menuconfig //配置内核<br>make uImage //编译内核<br>make dtbs //编译设备树<br>make modules //编译模块<br>make modules_install //安装模块</p>
+<h4 id="调试内核："><a href="#调试内核：" class="headerlink" title="调试内核："></a>调试内核：</h4><p>printk</p>
+<p>系统移植：</p>
 
         
         
@@ -897,11 +906,11 @@
 			
 		
 			
-				<li><a href="/tags/进程/" title="进程">进程<sup>1</sup></a></li>
+				<li><a href="/tags/sqlite3/" title="sqlite3">sqlite3<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/sqlite3/" title="sqlite3">sqlite3<sup>1</sup></a></li>
+				<li><a href="/tags/进程/" title="进程">进程<sup>1</sup></a></li>
 			
 		
 			

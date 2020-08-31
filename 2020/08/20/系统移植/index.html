@@ -11,18 +11,25 @@
     
 
     
-    <meta name="description" content="why    在做智能冰箱的项目中，A9板作为服务器来控制M0板上的硬件，A9板和M0板用串口相连。">
+    <meta name="description" content="系统移植的知识点：linux系统的启动流程1.计算机硬件启动2.引导加载程序3.启动引导内核 uboot的启动流程在uboot移植配置的是bl2. 设备树&amp;ensp&amp;ensp在内核里有一个结构“struct machine_desc”，内核用这个结构表示一个实际存在的板子，而针对每个板子都会有一个文件定义这个结构体，这个文件叫平台代码。 &amp;ensp&amp;enspdevi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="系统移植">
 <meta property="og:url" content="http://yoursite.com/2020/08/20/%E7%B3%BB%E7%BB%9F%E7%A7%BB%E6%A4%8D/index.html">
 <meta property="og:site_name" content="晏辉的技术小栈">
-<meta property="og:description" content="why    在做智能冰箱的项目中，A9板作为服务器来控制M0板上的硬件，A9板和M0板用串口相连。">
+<meta property="og:description" content="系统移植的知识点：linux系统的启动流程1.计算机硬件启动2.引导加载程序3.启动引导内核 uboot的启动流程在uboot移植配置的是bl2. 设备树&amp;ensp&amp;ensp在内核里有一个结构“struct machine_desc”，内核用这个结构表示一个实际存在的板子，而针对每个板子都会有一个文件定义这个结构体，这个文件叫平台代码。 &amp;ensp&amp;enspdevi">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/images/ubootstart.png">
+<meta property="og:image" content="d:/BLOG/source/images/ubootstart.png">
+<meta property="og:image" content="http://yoursite.com/images/uboot.jpg">
+<meta property="og:image" content="d:/BLOG/source/images/uboot.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%96%87%E4%BB%B6%E4%BD%9C%E7%94%A8.png">
+<meta property="og:image" content="d:/BLOG/source/images/文件作用.png">
 <meta property="article:published_time" content="2020-08-20T03:45:38.000Z">
-<meta property="article:modified_time" content="2020-08-31T08:00:36.541Z">
+<meta property="article:modified_time" content="2020-08-31T09:34:45.885Z">
 <meta property="article:author" content="YanHui">
 <meta property="article:tag" content="系统移植">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/ubootstart.png">
 
     
     <link rel="alternative" href="/atom.xml" title="晏辉的技术小栈" type="application/atom+xml">
@@ -96,11 +103,20 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%A7%BB%E6%A4%8D%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">系统移植的知识点：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.0.1.</span> <span class="toc-text">linux系统的启动流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#uboot%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.0.2.</span> <span class="toc-text">uboot的启动流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E6%A0%91"><span class="toc-number">1.0.3.</span> <span class="toc-text">设备树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tftp-nfs"><span class="toc-number">1.0.4.</span> <span class="toc-text">tftp nfs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.0.5.</span> <span class="toc-text">根文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#linux%E8%AE%BE%E5%A4%87%E6%96%87%E4%BB%B6"><span class="toc-number">1.0.5.1.</span> <span class="toc-text">linux设备文件</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E3%80%81%E7%BC%96%E8%AF%91%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">1.0.6.</span> <span class="toc-text">配置、编译的命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E5%86%85%E6%A0%B8%EF%BC%9A"><span class="toc-number">1.0.7.</span> <span class="toc-text">调试内核：</span></a></li></ol></li></ol></li></ol>
 		
 		</div>
 		
-		<p>why<br>    在做智能冰箱的项目中，A9板作为服务器来控制M0板上的硬件，A9板和M0板用串口相连。</p>
+		<h2 id="系统移植的知识点："><a href="#系统移植的知识点：" class="headerlink" title="系统移植的知识点："></a>系统移植的知识点：</h2><h4 id="linux系统的启动流程"><a href="#linux系统的启动流程" class="headerlink" title="linux系统的启动流程"></a>linux系统的启动流程</h4><p>1.计算机硬件启动<br>2.引导加载程序<br>3.启动引导内核</p>
+<h4 id="uboot的启动流程"><a href="#uboot的启动流程" class="headerlink" title="uboot的启动流程"></a>uboot的启动流程</h4><p><img src="/images/ubootstart.png"><br><img src="D:\BLOG\source\images\ubootstart.png"><br><img src="/images/uboot.jpg"><br><img src="D:\BLOG\source\images\uboot.jpg"><br>在uboot移植配置的是bl2.</p>
+<h4 id="设备树"><a href="#设备树" class="headerlink" title="设备树"></a>设备树</h4><p>&amp;ensp&amp;ensp在内核里有一个结构“struct machine_desc”，内核用这个结构表示一个实际存在的板子，而针对每个板子都会有一个文件定义这个结构体，这个文件叫平台代码。</p>
+<p>&amp;ensp&amp;enspdevice Tree是一种描述硬件的数据结构，它起源于OpenFirmware（OF）。Device Tree 由一系列被命令的节点（node）和属性（property）组成，而结点本身可包含子节点。所谓属性，就是成对出现的name和value。在Device Tree中，描述的信息包括（hard code（硬编码） 到kernel中）：<br>1.CPU的数量和类别<br>2.内存基地址和大小<br>3.总线和桥<br>4.外设连接<br>5.中断控制器和中断使用情况<br>6.GPIO控制器和GPIO使用情况<br>7.clock控制器和clock使用情况<br>DTS<br>&amp;ensp&amp;ensp.dts我呢见是一种ASCII文本格式的Device Tree 描述，此文本格式非常人性化，适合人类的阅读习惯。一个.dts文件对应一个ARM的machine，一般放置在内核的arch/arm/boot/dts目录下。<br>&amp;ensp&amp;ensp由于SOC可能对应多个machine（一个SOC可以对应多个产品和电路板），势必这些dts文件需包含许多个共同的部分，linux内核为了简化，把SOc公用的部分或者多个machine共同部分一般提炼为.dtsi，类似c语言的头文件。</p>
+<h4 id="tftp-nfs"><a href="#tftp-nfs" class="headerlink" title="tftp nfs"></a>tftp nfs</h4><p>：<br>tftp用来加载内核和设备树；nfs用来挂载文件系统。<br>内核的移植：<br>配置内核，选择CPU和开发板</p>
+<h4 id="根文件系统"><a href="#根文件系统" class="headerlink" title="根文件系统"></a>根文件系统</h4><p>制作：busybox<br>根文件系统（root filesysytem）是存放运行、维护系统所必须的各种工具软件、库文件、脚本、配置文件和其他特殊文件的地方，也可以安装各种软件包。<br><img src="/images/%E6%96%87%E4%BB%B6%E4%BD%9C%E7%94%A8.png"><br><img src="D:\BLOG\source\images\文件作用.png"></p>
+<h5 id="linux设备文件"><a href="#linux设备文件" class="headerlink" title="linux设备文件"></a>linux设备文件</h5><p>&amp;ensp&amp;ensp在linux中由字符设备文件和块设备文件。<br>Linux系统是通过主设备和次设备好来区分设备的；<br>主设备号：（major） 用来区分哪类设备<br>次设备号：（minor）区分某类设备中的哪个设备</p>
+<h4 id="配置、编译的命令"><a href="#配置、编译的命令" class="headerlink" title="配置、编译的命令"></a>配置、编译的命令</h4><p>make menuconfig //配置内核<br>make uImage //编译内核<br>make dtbs //编译设备树<br>make modules //编译模块<br>make modules_install //安装模块</p>
+<h4 id="调试内核："><a href="#调试内核：" class="headerlink" title="调试内核："></a>调试内核：</h4><p>printk</p>
+<p>系统移植：</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -157,7 +173,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%A7%BB%E6%A4%8D%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">系统移植的知识点：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.0.1.</span> <span class="toc-text">linux系统的启动流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#uboot%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.0.2.</span> <span class="toc-text">uboot的启动流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E6%A0%91"><span class="toc-number">1.0.3.</span> <span class="toc-text">设备树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tftp-nfs"><span class="toc-number">1.0.4.</span> <span class="toc-text">tftp nfs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.0.5.</span> <span class="toc-text">根文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#linux%E8%AE%BE%E5%A4%87%E6%96%87%E4%BB%B6"><span class="toc-number">1.0.5.1.</span> <span class="toc-text">linux设备文件</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E3%80%81%E7%BC%96%E8%AF%91%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">1.0.6.</span> <span class="toc-text">配置、编译的命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E5%86%85%E6%A0%B8%EF%BC%9A"><span class="toc-number">1.0.7.</span> <span class="toc-text">调试内核：</span></a></li></ol></li></ol></li></ol>
  
   </div>
 
@@ -223,11 +239,11 @@
 			
 		
 			
-				<li><a href="/tags/进程/" title="进程">进程<sup>1</sup></a></li>
+				<li><a href="/tags/sqlite3/" title="sqlite3">sqlite3<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/sqlite3/" title="sqlite3">sqlite3<sup>1</sup></a></li>
+				<li><a href="/tags/进程/" title="进程">进程<sup>1</sup></a></li>
 			
 		
 			
