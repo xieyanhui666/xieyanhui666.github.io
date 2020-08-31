@@ -79,6 +79,143 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2020/08/20/系统移植/" title="系统移植" itemprop="url">系统移植</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-20T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>why<br>    在做智能冰箱的项目中，A9板作为服务器来控制M0板上的硬件，A9板和M0板用串口相连。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/%E7%B3%BB%E7%BB%9F%E7%A7%BB%E6%A4%8D/">系统移植</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/系统移植/">系统移植</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/08/13/V4L2/" title="V4L2" itemprop="url">V4L2</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-13T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-13</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="why："><a href="#why：" class="headerlink" title="why："></a>why：</h3><p>不同厂商的摄像头有不同的驱动，不同的驱动对应不同的文件IO，会给编程带来很大的难度，为了解决这个问题，内核中有一个框架V4L2（video for linux 2），应用层只需要针对V4L2进行编程，屏蔽掉了驱动对应用层编程的影响，用相同的方式可以驱动不同的种类支持V4L2的摄像头。</p>
+<h3 id="what"><a href="#what" class="headerlink" title="what:"></a>what:</h3><h4 id="视频采集方式"><a href="#视频采集方式" class="headerlink" title="视频采集方式"></a>视频采集方式</h4><p>操作系统一般把系统使用的内存划分成用户空间和内核空间，分别由应用程序管理和操作系统管理。应用程序可以直接访问内存的地址，而内核空间存放的是供内核访问的代码和数据，用户不能直接访问。v4l2捕获的数据，最初是存放在内核空间的，这意味着用户不能直接访问该段内存，必须通过某些手段来转换地址。<br>一共有三种视频采集方式：使用read、write方式；内存映射方式和用户指针模式。<br>read、write方式：在用户空间和内核空间不断拷贝数据，占用了大量用户内存空间，效率不高。<br>内存映射方式：把设备里的内存映射到应用程序中的内存控件，直接处理设备内存，这是一种有效的方式。上面的mmap函数就是使用这种方式。<br>用户指针模式：内存片段由应用程序自己分配。这点需要在v4l2_requestbuffers里将memory字段设置成V4L2_MEMORY_USERPTR。</p>
+<h4 id="使用流程"><a href="#使用流程" class="headerlink" title="使用流程"></a>使用流程</h4><p>1.打开设备<br>    int open(“/dev/vodeo0”,O_RDWR);<br>2.获取设备支持格式(可以省略)<br>    int ioctl(int fd, unsigned long int  __request, _);<br>3.设置设备采集格式VIDIOC_S_FMT<br>4.分配内核队列空间（申请内核缓存区）VIDIOC_REQBUFS（提高效率），将内核空间映射到用户空间，内核空间和用户空间可以直接使用<br>5.映射队列空间到用户空间（mmap），VIDIOC_QUERYBUF,投放一个空的视频缓冲区到视频输入队列中VIDIOC_QBUF<br>6.开始采集（会调用select函数）VIDIOC_STREAMON<br>7.读取数据-上锁 VIDIOC_DQBUF<br>8.读数据-解锁VIDIOC_QBUF<br>9.停止采集VIDIOC_STREAMOFF<br>从视频缓存区输出队列获取一个有视频数据的视频缓存区VIDIOC_DQBUF，读取视屏数据并保存成图片文件<br>10.释放映射空间<br>11.关闭设备</p>
+<h4 id="控制命令"><a href="#控制命令" class="headerlink" title="控制命令"></a>控制命令</h4><h5 id="1．-控制命令-VIDIOC-ENUM-FMT"><a href="#1．-控制命令-VIDIOC-ENUM-FMT" class="headerlink" title="1． 控制命令 VIDIOC_ENUM_FMT"></a>1． 控制命令 VIDIOC_ENUM_FMT</h5><p>功能： 获取当前视频设备支持的视频格式 。<br>参数说明：参数类型为 V4L2 的视频格式描述符类型 struct v4l2_fmtdesc<br>返回值说明： 执行成功时，函数返回值为 0；struct v4l2_fmtdesc 结构体中<br>的 .pixelformat 和 .description 成员返回当前视频设备所支持的视频格式；</p>
+<h5 id="2．-控制命令-VIDIOC-QUERYCAP"><a href="#2．-控制命令-VIDIOC-QUERYCAP" class="headerlink" title="2． 控制命令 VIDIOC_QUERYCAP"></a>2． 控制命令 VIDIOC_QUERYCAP</h5><p>功能： 查询视频设备的功能 ；<br>参数说明：参数类型为 V4L2 的能力描述类型 struct v4l2_capability ；<br>返回值说明： 执行成功时，函数返回值为 0；函数执行成功后，struct<br>v4l2_capability 结构体变量中的返回当前视频设备所支持的功能；例如支持视频<br>捕获功能 V4L2_CAP_VIDEO_CAPTURE、V4L2_CAP_STREAMING 等。</p>
+<h5 id="3．-控制命令-VIDIOC-S-FMT"><a href="#3．-控制命令-VIDIOC-S-FMT" class="headerlink" title="3． 控制命令 VIDIOC_S_FMT"></a>3． 控制命令 VIDIOC_S_FMT</h5><p>功能： 设置视频设备的视频数据格式，例如设置视频图像数据的长、宽，图像<br>格式（JPEG、YUYV 格式）；<br>参数说明：参数类型为 V4L2 的视频数据格式类型 struct v4l2_format ；<br>返回值说明： 执行成功时，函数返回值为 0；</p>
+<h5 id="4．-控制命令-VIDIOC-REQBUFS"><a href="#4．-控制命令-VIDIOC-REQBUFS" class="headerlink" title="4． 控制命令 VIDIOC_REQBUFS"></a>4． 控制命令 VIDIOC_REQBUFS</h5><p>功能： 请求 V4L2 驱动分配视频缓冲区（申请 V4L2 视频驱动分配内存），V4L2<br>是视频设备的驱动层，位于内核空间，所以通过 VIDIOC_REQBUFS 控制命令<br>字申请的内存位于内核空间，应用程序不能直接访问，需要通过调用 mmap 内<br>存映射函数把内核空间内存映射到用户空间后，应用程序通过访问用户空间地<br>址来访问内核空间。<br>参数说明：参数类型为 V4L2 的申请缓冲区数据结构体类型 struct<br>v4l2_requestbuffers；<br>返回值说明： 执行成功时，函数返回值为 0；V4L2 驱动层分配好了视频缓冲区；</p>
+<h5 id="5-控制命令-VIDIOC-QUERYBUF"><a href="#5-控制命令-VIDIOC-QUERYBUF" class="headerlink" title="5 控制命令 VIDIOC_QUERYBUF"></a>5 控制命令 VIDIOC_QUERYBUF</h5><p>功能： 查询已经分配的 V4L2 的视频缓冲区的相关信息，包括视频缓冲区的使<br>用状态、在内核空间的偏移地址、缓冲区长度等。在应用程序设计中通过调<br>VIDIOC_QUERYBUF 来获取内核空间的视频缓冲区信息，然后调用函数 mmap<br>把内核空间地址映射到用户空间，这样应用程序才能够访问位于内核空间的视频<br>缓冲区。<br>参数说明：参数类型为 V4L2 缓冲区数据结构类型 struct v4l2_buffer ；<br>返回值说明： 执行成功时，函数返回值为 0；struct v4l2_buffer 结构体变量中保<br>存了指令的缓冲区的相关信息；<br>一般情况下，应用程序中调用 VIDIOC_QUERYBUF 取得了内核缓冲区信息后，<br>紧接着调用 mmap 函数把内核空间地址映射到用户空间，方便用户空间应用程序<br>的访问</p>
+<h5 id="6．-控制命令-VIDIOC-QBUF"><a href="#6．-控制命令-VIDIOC-QBUF" class="headerlink" title="6． 控制命令 VIDIOC_QBUF"></a>6． 控制命令 VIDIOC_QBUF</h5><p>功能： 投放一个空的视频缓冲区到视频缓冲区输入队列中 ；<br>参数说明：参数类型为 V4L2 缓冲区数据结构类型 struct v4l2_buffer ；<br>返回值说明： 执行成功时，函数返回值为 0；函数执行成功后，指令的视频缓<br>冲区进入视频输入队列，在启动视频设备拍摄图像时，相应的视频数据被保存到<br>视频输入队列相应的视频缓冲区中。</p>
+<h5 id="7．-控制命令-VIDIOC-STREAMON"><a href="#7．-控制命令-VIDIOC-STREAMON" class="headerlink" title="7． 控制命令 VIDIOC_STREAMON"></a>7． 控制命令 VIDIOC_STREAMON</h5><p>功能： 启动视频采集命令，应用程序调用 VIDIOC_STREAMON 启动视频采集<br>命令后，视频设备驱动程序开始采集视频数据，并把采集到的视频数据保存到<br>视频驱动的视频缓冲区中。<br>参数说明：参数类型为 V4L2 的视频缓冲区类型 enum v4l2_buf_type ；<br>返回值说明： 执行成功时，函数返回值为 0；函数执行成功后，视频设备驱动<br>程序开始采集视频数据，此时应用程序一般通过调用 select 函数来判断一帧视频<br>数据是否采集完成，当视频设备驱动完成一帧视频数据采集并保存到视频缓冲区中时，select 函数返回，应用程序接着可以读取视频数据；否则 select 函数阻塞<br>直到视频数据采集完成。Select 函数的使用请读者参考相关资料。</p>
+<h5 id="8．-控制命令-VIDIOC-DQBUF"><a href="#8．-控制命令-VIDIOC-DQBUF" class="headerlink" title="8． 控制命令 VIDIOC_DQBUF"></a>8． 控制命令 VIDIOC_DQBUF</h5><p>功能： 从视频缓冲区的输出队列中取得一个已经保存有一帧视频数据的视频缓<br>冲区；<br>参数说明：参数类型为 V4L2 缓冲区数据结构类型 struct v4l2_buffer ；<br>返回值说明： 执行成功时，函数返回值为 0；函数执行成功后，相应的内核视<br>频缓冲区中保存有当前拍摄到的视频数据，应用程序可以通过访问用户空间来读<br>取该视频数据。（前面已经通过调用函数 mmap 做了用户空间和内核空间的内存<br>映射<br>。</p>
+<h5 id="9．-控制命令-VIDIOC-STREAMOFF"><a href="#9．-控制命令-VIDIOC-STREAMOFF" class="headerlink" title="9． 控制命令 VIDIOC_STREAMOFF"></a>9． 控制命令 VIDIOC_STREAMOFF</h5><p>功能： 停止视频采集命令，应用程序调用 VIDIOC_ STREAMOFF 停止视频采<br>集命令后，视频设备驱动程序不在采集视频数据。<br>参数说明：参数类型为 V4L2 的视频缓冲区类型 enum v4l2_buf_type ；<br>返回值说明： 执行成功时，函数返回值为 0；函数执行成功后，视频设备停止<br>采集视频数据。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line">&lt;采集一张图片 &gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/videodev2.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="comment">//1.打开设备</span></span><br><span class="line">    <span class="keyword">int</span> fd  = open(<span class="string">&quot;/dev/video0&quot;</span>, O_RDWR);</span><br><span class="line">        <span class="keyword">if</span>( fd &lt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            perror(<span class="string">&quot;open device&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="comment">//2.获取摄像头支持格式(文件描述、命令、与命令对应的结构体)</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">v4l2_fmtdesc</span> <span class="title">v4fmt</span>;</span></span><br><span class="line">    v4fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">    ret = ioctl(fd, VIDIOC_ENUM_FMT, &amp;v4fmt);</span><br><span class="line">    <span class="keyword">if</span>(fd &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">    </span><br><span class="line">        perror(<span class="string">&quot;gets format1 error&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;idenx = %d\n&quot;</span>, v4fmt.index);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;flags = %d\n&quot;</span>, v4fmt.flags);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;description = %s\n&quot;</span>, v4fmt.description);</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *p = (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)&amp;v4fmt.pixelformat;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pixelformat = %c%c%c%c\n&quot;</span>, p[<span class="number">0</span>], p[<span class="number">1</span>], p[<span class="number">2</span>], p[<span class="number">3</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;reserved = %d\n&quot;</span>, v4fmt.reserved[<span class="number">0</span>]);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//3.设置采集格式</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">v4l2_format</span> <span class="title">vfmt</span>;</span></span><br><span class="line">    vfmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;<span class="comment">//摄像头采集</span></span><br><span class="line">    vfmt.fmt.pix.width = <span class="number">640</span>;</span><br><span class="line">    vfmt.fmt.pix.height = <span class="number">480</span>;</span><br><span class="line">    vfmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;<span class="comment">//设置视频采集格式</span></span><br><span class="line">    ret = ioctl(fd, VIDIOC_S_FMT, &amp;vfmt);</span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;set format error&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">memset</span>(&amp;vfmt, <span class="number">0</span>, <span class="keyword">sizeof</span>(vfmt));</span><br><span class="line">    vfmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">    ret = ioctl(fd, VIDIOC_G_FMT, &amp;vfmt);</span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;gets format2 error&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(vfmt.fmt.pix.width == <span class="number">640</span> &amp;&amp; vfmt.fmt.pix.height == <span class="number">480</span> </span><br><span class="line">            &amp;&amp; vfmt.fmt.pix.pixelformat == V4L2_PIX_FMT_YUYV)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;set ok&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;set fail\n&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//4.申请队列空间</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">v4l2_requestbuffers</span> <span class="title">reqbuffer</span>;</span></span><br><span class="line">    reqbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">    reqbuffer.count = <span class="number">4</span>;<span class="comment">//申请4个缓冲区</span></span><br><span class="line">    reqbuffer.memory = V4L2_MEMORY_MMAP;<span class="comment">//映射方式</span></span><br><span class="line"></span><br><span class="line">    ret = ioctl(fd, VIDIOC_REQBUFS, &amp;reqbuffer);</span><br><span class="line">     <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;request queue space error&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//5.映射内核空间到用户空间</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *mptr[<span class="number">4</span>];<span class="comment">//保存用户空间首地址</span></span><br><span class="line">    <span class="comment">//5.1查询缓冲区</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">v4l2_buffer</span> <span class="title">mapbuffer</span>;</span></span><br><span class="line">    <span class="comment">//初始化type index</span></span><br><span class="line">    mapbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        mapbuffer.index = i;</span><br><span class="line">        <span class="comment">//从内核空间中查询一个空间做映射</span></span><br><span class="line">        ret = ioctl(fd, VIDIOC_QUERYBUF, &amp;mapbuffer);</span><br><span class="line">        <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            perror(<span class="string">&quot;查询内核空间队列失败&quot;</span>);</span><br><span class="line">            <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">        &#125;</span><br><span class="line">        mptr[i] = (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)mmap(<span class="literal">NULL</span>,mapbuffer.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, mapbuffer.m.offset);</span><br><span class="line">        <span class="comment">//通知内核使用完毕；(放回去)</span></span><br><span class="line">        ret = ioctl(fd, VIDIOC_QBUF, &amp;mapbuffer);</span><br><span class="line">        <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            perror(<span class="string">&quot;back on error&quot;</span>);</span><br><span class="line">            <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//6.开始采集</span></span><br><span class="line">    <span class="keyword">int</span> type;</span><br><span class="line">    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">    ret = ioctl(fd, VIDIOC_STREAMON,&amp;type);</span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;start error&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;开始采集\n&quot;</span>);</span><br><span class="line">    <span class="comment">//7.从队列中提取一帧数据</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">v4l2_buffer</span> <span class="title">readbuffer</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;readbuffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(struct v4l2_buffer));</span><br><span class="line">    readbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE; </span><br><span class="line">    readbuffer.memory = V4L2_MEMORY_MMAP;</span><br><span class="line">    <span class="comment">//readbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span></span><br><span class="line">    ret = ioctl(fd, VIDIOC_DQBUF, &amp;readbuffer);</span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;extration data error&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    FILE * file = fopen(<span class="string">&quot;my1.yuyv&quot;</span>,<span class="string">&quot;w+&quot;</span>); </span><br><span class="line">    <span class="comment">//mptr[readbuffer.index];</span></span><br><span class="line">    fwrite(mptr[readbuffer.index], readbuffer.length, <span class="number">1</span>, file);</span><br><span class="line">    fclose(file);</span><br><span class="line">    <span class="comment">//8.通知内核已经使用完毕</span></span><br><span class="line">    ret = ioctl(fd, VIDIOC_QBUF, &amp;readbuffer);</span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">    </span><br><span class="line">        perror(<span class="string">&quot;put back in queue fail&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> GO_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//9.停止采集</span></span><br><span class="line">    ret = ioctl(fd, VIDIOC_STREAMOFF, &amp;type);  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">GO_ERR:</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="framebuffer"><a href="#framebuffer" class="headerlink" title="framebuffer"></a>framebuffer</h3><h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>用来屏蔽图形显示硬件的抽象层。提供了显卡的抽象描述，同时代表了显卡上的显存，往显示缓存中写入特定格式的数据就意味着向屏幕输出内容。用户将framebuffer映射到进程空间后，就可以直接进行读写操作，写操作会直接反映在屏幕显示的画面上。<br>这种方式尤其适用适用于没有实际显存的嵌入式设备。<br>带GPU硬件的设备，在显示时，图形的旋转、渲染等，大部分由GPU完成。而framebuffer仅仅是一个映射，将用户写入的信息直接显示在屏幕上，所以图形的处理都是在用户层实现、由CPU完成，因而CPU的负担会加重。</p>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>1.通过framebuffer，应用程序用mmap把显存映射到应用程序虚拟地址空间，将要显示的数据写入这个内存空间，就可以在屏幕上显示出来；<br>2.驱动程序分配系统内存作为显存；实现file_operations结构中的接口，为应用程序服务，实现fb_ops结构中的接口，控制和操作LCD控制器。<br>3.驱动程序将显存的起始地址和长度传给LCD控制器的寄存器（一般由fb_set_var完成），LCD控制器会自动的将显存中华的数据显示在LCD屏上。</p>
+<h4 id="what-1"><a href="#what-1" class="headerlink" title="what"></a>what</h4><p>1.填充一个fbinfo结构<br>1.1对于fbinfo结构体，最主要的是fs_ops成员，需要针对具体设备实现fs_ops的接口<br>1.2考虑是否使用中断处理<br>1.3考虑内存访问方式<br>1.3.1显卡不自带显存的，分配系统内存作为显存<br>1.3.2显卡自带显存，用I/O内存接口进行访问（request_mem_region/ioremap)<br>2.用register_framebuffer(fbinfo*)将fbinfo结构体注册到内核<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20190827165100661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1dTE5,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/20190827165100661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1dTE5,size_16,color_FFFFFF,t_70</a></p>
+<p>用ls -l  /dev 查看<br><img src="/images/%E6%9F%A5%E6%89%BE%E6%98%BE%E7%A4%BA%E7%BC%93%E5%AD%98.png"><br><img src="D:\BLOG\source\images\查找显示缓存.png"></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A8%8B%E6%8E%A5%E5%8F%A3/">视频编程接口</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/V4L2/">V4L2</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2020/08/12/STM32-M0/" title="STM32-M0的开发" itemprop="url">STM32-M0的开发</a>
   </h1>
   <p class="article-author">By
@@ -214,9 +351,10 @@
 <h5 id="exec函数族："><a href="#exec函数族：" class="headerlink" title="exec函数族："></a>exec函数族：</h5><p>1.重生<br>2.执行新的程序</p>
 <h5 id="进程的终止"><a href="#进程的终止" class="headerlink" title="进程的终止:"></a>进程的终止:</h5><p>void exit(int status);<br>void _exit(int status);<br>status:传递进程结束时的状态。一般来说，0表示正常结束，其它数值表示出现了错误，进程非正常结束。<br>exit()—-清除缓冲<br>_exit()——不会清除缓冲</p>
 <h5 id="wait函数族：防止产生僵尸进程"><a href="#wait函数族：防止产生僵尸进程" class="headerlink" title="wait函数族：防止产生僵尸进程"></a>wait函数族：防止产生僵尸进程</h5><p>pid_t wait(int *status);<br>pid_t waitpid(pid_t pid, int *status, int options);<br>int options:WNOHANG:若指定的进程没有结束，则waitpid不阻塞而里即返回，此时返回值为0；WUNTRACED:为了实现某种操作，由pid指定的任一子进程已被暂停，且其状态自暂停以来还未报告过，则返回其状态。</p>
-<h4 id="进程间的通信"><a href="#进程间的通信" class="headerlink" title="进程间的通信"></a>进程间的通信</h4><h5 id="早起UNIX进程间通信方式"><a href="#早起UNIX进程间通信方式" class="headerlink" title="早起UNIX进程间通信方式"></a>早起UNIX进程间通信方式</h5><p>无名管道（pipe）<br>有名管道（fifo）<br>信号（signal）</p>
+<h4 id="进程间的通信"><a href="#进程间的通信" class="headerlink" title="进程间的通信"></a>进程间的通信</h4><h5 id="早起UNIX进程间通信方式"><a href="#早起UNIX进程间通信方式" class="headerlink" title="早起UNIX进程间通信方式"></a>早起UNIX进程间通信方式</h5><p>无名管道（pipe）<br>有名管道（fifo）<br>（管道是一个程序的输出直接连接到另一个程序的输入）<br>信号（signal）</p>
 <h5 id="System-V-IPC"><a href="#System-V-IPC" class="headerlink" title="System V IPC"></a>System V IPC</h5><p>共享内存（share memory）<br>消息队列（message queue）<br>信号灯集（semaphore set）</p>
 <h5 id="套接字（socket）"><a href="#套接字（socket）" class="headerlink" title="套接字（socket）"></a>套接字（socket）</h5><h5 id="POSIX进程间通信机制"><a href="#POSIX进程间通信机制" class="headerlink" title="POSIX进程间通信机制"></a>POSIX进程间通信机制</h5><p>POSIX消息队列<br>POSIX信号量<br>POSIX共享内存区 </p>
+<h6 id="无名管道："><a href="#无名管道：" class="headerlink" title="无名管道："></a>无名管道：</h6><h6 id="共享内存："><a href="#共享内存：" class="headerlink" title="共享内存："></a>共享内存：</h6><p>创建：<br>int shmget(key_t key, int size, int shmflg);<br>返回值：成功返回id，失败返回EOF<br>key:和共享内存关联，IPC_PRIVATE 或ftok生成<br>shmflg：共享内存标志位，IPC_CREAT |0666<br>例：创建一个私有共享内存，大小512，权限0666<br>int shmid;<br>if((shmid = shmget(IPC_PRIVATE, 512, 0666)) &lt;  0 )<br>{<br>    perror(“shmget”);<br>    exit(-1);<br>}</p>
 
         
         
@@ -327,7 +465,7 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2020/08/08/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2020/08/08/hello-world/" title="Hello Friends" itemprop="url">Hello Friends</a>
   </h1>
   <p class="article-author">By
        
@@ -340,7 +478,17 @@
 </header>
     <div class="article-content">
         
-        <pre><code>欢迎来到jack-hui的博客！</code></pre>
+        <pre><code>欢迎来到jack-hui的博客！这是我自己在学习过程中的笔记和自己想法，希望大家可以有所收获，同时能够指出我的不足，共同进步!
+
+
+
+
+
+
+
+
+
+简单的事情认真做，复杂的事情重复做。</code></pre>
 
         
         
@@ -680,6 +828,10 @@
 
 
 
+  <nav id="page-nav" class="clearfix">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next&lt;span&gt;&lt;&#x2F;span&gt;</a>
+  </nav>
+
 </div>
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
@@ -708,6 +860,18 @@
 		  
 		
 		  
+			<li><a href="/categories/数据结构/" title="数据结构">数据结构<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/系统移植/" title="系统移植">系统移植<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/视频编程接口/" title="视频编程接口">视频编程接口<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/驱动开发/" title="驱动开发">驱动开发<sup>1</sup></a></li>
 		  
 		
@@ -721,7 +885,15 @@
 		<ul class="clearfix">
 		
 			
+				<li><a href="/tags/算法/" title="算法">算法<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/M0/" title="M0">M0<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/V4L2/" title="V4L2">V4L2<sup>1</sup></a></li>
 			
 		
 			
@@ -738,6 +910,10 @@
 		
 			
 				<li><a href="/tags/平台设备/" title="平台设备">平台设备<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统移植/" title="系统移植">系统移植<sup>1</sup></a></li>
 			
 		
 		</ul>
