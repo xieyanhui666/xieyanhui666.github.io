@@ -225,6 +225,80 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2020/08/12/process/" title="process" itemprop="url">process</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-12T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="orgin："><a href="#orgin：" class="headerlink" title="orgin："></a>orgin：</h3><p>多任务编程：通俗的讲，用户可以在同一时间运行多个应用程序（实际是并发）。多任务操作系统使用某种调度策略支持多个任务并发执行。<br>任务：每个正在执行的应用程序，任务是一个逻辑概念，指由软件完成的活动，或者是为实现某个目的一系列操作。通常一个任务是一个程序的一次运行，一个任务包含一个或者多个完成独立功能的子任务，这个独立的子任务是进程或者线程。</p>
+<h3 id="why："><a href="#why：" class="headerlink" title="why："></a>why：</h3><p>&ensp;&ensp;&ensp;&ensp;每个应用程序的都可以运行很多次，有多个实例，再用程序去描述程序会显得不合适。<br>&ensp;&ensp;&ensp;&ensp;进程和程序的区别：<br>    程序是静态的代码，是保存在非易失性存储器上的指令和数据的有序集合，没有执行概念。<br>    进程是一个动态的，包括了动态的创建、调度、执行、消亡的整个过程。</p>
+<h3 id="how"><a href="#how" class="headerlink" title="how:"></a>how:</h3><p>&ensp;&ensp;&ensp;&ensp;进程是具有相对独立功能的程序在特定数据集合上动态执行的过程。</p>
+<h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><p>：<br>交互式进程：shell命令进程、文本编辑器和图形应用程序运行<br>批处理进程：编译器的编译操作、数据库搜索引擎<br>守护进程：   （一直在后台运行，不与任何终端的不关联) 系统进程</p>
+<h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><p>并发性:系统中多个进程可以同时并发执行，相互之间不受干扰<br>动态性：进程都有完整的生命周期，而且在进程的生命周期内，进程的状态是不断变化的，进程具有动态的地址空间（代码、数据、进程控制块）。<br>交互性：指的是进程间直接和间接的通信<br>独立性：进程是资源分配和调度的基本单位，各个进程的地址空间是相互独立的。<br>主要的状态：<br><img src="/images/%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81.png"><br><img src="D:\BLOG\source\images\进程的状态.png"></p>
+<h3 id="what"><a href="#what" class="headerlink" title="what:"></a>what:</h3><h4 id="进程的使用"><a href="#进程的使用" class="headerlink" title="进程的使用"></a>进程的使用</h4><h5 id="进程的创建："><a href="#进程的创建：" class="headerlink" title="进程的创建："></a>进程的创建：</h5><p>pid_t fork（void）;（子进程没有执行fork’函数从fork函数调用的下一条语句开始执行）</p>
+<p>vfork（）<br>fork和vfork的异同：</p>
+<p>clone<br>system<br>getpid（）获取当前进程进程号</p>
+<h5 id="exec函数族："><a href="#exec函数族：" class="headerlink" title="exec函数族："></a>exec函数族：</h5><p>1.重生<br>2.执行新的程序</p>
+<h5 id="进程的终止"><a href="#进程的终止" class="headerlink" title="进程的终止:"></a>进程的终止:</h5><p>void exit(int status);<br>void _exit(int status);<br>status:传递进程结束时的状态。一般来说，0表示正常结束，其它数值表示出现了错误，进程非正常结束。<br>exit()—-清除缓冲<br>_exit()——不会清除缓冲</p>
+<h5 id="wait函数族：防止产生僵尸进程"><a href="#wait函数族：防止产生僵尸进程" class="headerlink" title="wait函数族：防止产生僵尸进程"></a>wait函数族：防止产生僵尸进程</h5><p>pid_t wait(int *status);<br>pid_t waitpid(pid_t pid, int *status, int options);<br>int options:WNOHANG:若指定的进程没有结束，则waitpid不阻塞而里即返回，此时返回值为0；WUNTRACED:为了实现某种操作，由pid指定的任一子进程已被暂停，且其状态自暂停以来还未报告过，则返回其状态。</p>
+<h4 id="进程间的通信"><a href="#进程间的通信" class="headerlink" title="进程间的通信"></a>进程间的通信</h4><h5 id="早起UNIX进程间通信方式"><a href="#早起UNIX进程间通信方式" class="headerlink" title="早起UNIX进程间通信方式"></a>早起UNIX进程间通信方式</h5><p>无名管道（pipe）<br>有名管道（fifo）<br>（管道是一个程序的输出直接连接到另一个程序的输入）<br>信号（signal）</p>
+<h5 id="System-V-IPC"><a href="#System-V-IPC" class="headerlink" title="System V IPC"></a>System V IPC</h5><p>共享内存（share memory）<br>消息队列（message queue）<br>信号灯集（semaphore set）</p>
+<h5 id="套接字（socket）"><a href="#套接字（socket）" class="headerlink" title="套接字（socket）"></a>套接字（socket）</h5><h5 id="POSIX进程间通信机制"><a href="#POSIX进程间通信机制" class="headerlink" title="POSIX进程间通信机制"></a>POSIX进程间通信机制</h5><p>POSIX消息队列<br>POSIX信号量<br>POSIX共享内存区 </p>
+<h6 id="无名管道："><a href="#无名管道：" class="headerlink" title="无名管道："></a>无名管道：</h6><h6 id="共享内存："><a href="#共享内存：" class="headerlink" title="共享内存："></a>共享内存：</h6><p>创建：<br>int shmget(key_t key, int size, int shmflg);<br>返回值：成功返回id，失败返回EOF<br>key:和共享内存关联，IPC_PRIVATE 或ftok生成<br>shmflg：共享内存标志位，IPC_CREAT |0666<br>例：创建一个私有共享内存，大小512，权限0666<br>int shmid;<br>if((shmid = shmget(IPC_PRIVATE, 512, 0666)) &lt;  0 )<br>{<br>    perror(“shmget”);<br>    exit(-1);<br>}</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/IO%E8%BF%9B%E7%A8%8B/">IO进程</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/进程/">进程</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2020/08/12/STM32-M0/" title="STM32-M0的开发" itemprop="url">STM32-M0的开发</a>
   </h1>
   <p class="article-author">By
@@ -309,80 +383,6 @@
   <div class="article-tags">
   
   <span></span> <a href="/tags/M0/">M0</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2020/08/12/process/" title="process" itemprop="url">process</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="YanHui" target="_blank" itemprop="author">YanHui</a>
-		
-  <p class="article-time">
-    <time datetime="2020-08-12T03:45:38.000Z" itemprop="datePublished"> 发表于 2020-08-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h3 id="orgin："><a href="#orgin：" class="headerlink" title="orgin："></a>orgin：</h3><p>多任务编程：通俗的讲，用户可以在同一时间运行多个应用程序（实际是并发）。多任务操作系统使用某种调度策略支持多个任务并发执行。<br>任务：每个正在执行的应用程序，任务是一个逻辑概念，指由软件完成的活动，或者是为实现某个目的一系列操作。通常一个任务是一个程序的一次运行，一个任务包含一个或者多个完成独立功能的子任务，这个独立的子任务是进程或者线程。</p>
-<h3 id="why："><a href="#why：" class="headerlink" title="why："></a>why：</h3><p>&ensp;&ensp;&ensp;&ensp;每个应用程序的都可以运行很多次，有多个实例，再用程序去描述程序会显得不合适。<br>&ensp;&ensp;&ensp;&ensp;进程和程序的区别：<br>    程序是静态的代码，是保存在非易失性存储器上的指令和数据的有序集合，没有执行概念。<br>    进程是一个动态的，包括了动态的创建、调度、执行、消亡的整个过程。</p>
-<h3 id="how"><a href="#how" class="headerlink" title="how:"></a>how:</h3><p>&ensp;&ensp;&ensp;&ensp;进程是具有相对独立功能的程序在特定数据集合上动态执行的过程。</p>
-<h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><p>：<br>交互式进程：shell命令进程、文本编辑器和图形应用程序运行<br>批处理进程：编译器的编译操作、数据库搜索引擎<br>守护进程：   （一直在后台运行，不与任何终端的不关联) 系统进程</p>
-<h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><p>并发性:系统中多个进程可以同时并发执行，相互之间不受干扰<br>动态性：进程都有完整的生命周期，而且在进程的生命周期内，进程的状态是不断变化的，进程具有动态的地址空间（代码、数据、进程控制块）。<br>交互性：指的是进程间直接和间接的通信<br>独立性：进程是资源分配和调度的基本单位，各个进程的地址空间是相互独立的。<br>主要的状态：<br><img src="/images/%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81.png"><br><img src="D:\BLOG\source\images\进程的状态.png"></p>
-<h3 id="what"><a href="#what" class="headerlink" title="what:"></a>what:</h3><h4 id="进程的使用"><a href="#进程的使用" class="headerlink" title="进程的使用"></a>进程的使用</h4><h5 id="进程的创建："><a href="#进程的创建：" class="headerlink" title="进程的创建："></a>进程的创建：</h5><p>pid_t fork（void）;（子进程没有执行fork’函数从fork函数调用的下一条语句开始执行）</p>
-<p>vfork（）<br>fork和vfork的异同：</p>
-<p>clone<br>system<br>getpid（）获取当前进程进程号</p>
-<h5 id="exec函数族："><a href="#exec函数族：" class="headerlink" title="exec函数族："></a>exec函数族：</h5><p>1.重生<br>2.执行新的程序</p>
-<h5 id="进程的终止"><a href="#进程的终止" class="headerlink" title="进程的终止:"></a>进程的终止:</h5><p>void exit(int status);<br>void _exit(int status);<br>status:传递进程结束时的状态。一般来说，0表示正常结束，其它数值表示出现了错误，进程非正常结束。<br>exit()—-清除缓冲<br>_exit()——不会清除缓冲</p>
-<h5 id="wait函数族：防止产生僵尸进程"><a href="#wait函数族：防止产生僵尸进程" class="headerlink" title="wait函数族：防止产生僵尸进程"></a>wait函数族：防止产生僵尸进程</h5><p>pid_t wait(int *status);<br>pid_t waitpid(pid_t pid, int *status, int options);<br>int options:WNOHANG:若指定的进程没有结束，则waitpid不阻塞而里即返回，此时返回值为0；WUNTRACED:为了实现某种操作，由pid指定的任一子进程已被暂停，且其状态自暂停以来还未报告过，则返回其状态。</p>
-<h4 id="进程间的通信"><a href="#进程间的通信" class="headerlink" title="进程间的通信"></a>进程间的通信</h4><h5 id="早起UNIX进程间通信方式"><a href="#早起UNIX进程间通信方式" class="headerlink" title="早起UNIX进程间通信方式"></a>早起UNIX进程间通信方式</h5><p>无名管道（pipe）<br>有名管道（fifo）<br>（管道是一个程序的输出直接连接到另一个程序的输入）<br>信号（signal）</p>
-<h5 id="System-V-IPC"><a href="#System-V-IPC" class="headerlink" title="System V IPC"></a>System V IPC</h5><p>共享内存（share memory）<br>消息队列（message queue）<br>信号灯集（semaphore set）</p>
-<h5 id="套接字（socket）"><a href="#套接字（socket）" class="headerlink" title="套接字（socket）"></a>套接字（socket）</h5><h5 id="POSIX进程间通信机制"><a href="#POSIX进程间通信机制" class="headerlink" title="POSIX进程间通信机制"></a>POSIX进程间通信机制</h5><p>POSIX消息队列<br>POSIX信号量<br>POSIX共享内存区 </p>
-<h6 id="无名管道："><a href="#无名管道：" class="headerlink" title="无名管道："></a>无名管道：</h6><h6 id="共享内存："><a href="#共享内存：" class="headerlink" title="共享内存："></a>共享内存：</h6><p>创建：<br>int shmget(key_t key, int size, int shmflg);<br>返回值：成功返回id，失败返回EOF<br>key:和共享内存关联，IPC_PRIVATE 或ftok生成<br>shmflg：共享内存标志位，IPC_CREAT |0666<br>例：创建一个私有共享内存，大小512，权限0666<br>int shmid;<br>if((shmid = shmget(IPC_PRIVATE, 512, 0666)) &lt;  0 )<br>{<br>    perror(“shmget”);<br>    exit(-1);<br>}</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/IO%E8%BF%9B%E7%A8%8B/">IO进程</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/进程/">进程</a>
   </div>
 
 </div>
@@ -898,19 +898,19 @@
 			
 		
 			
-				<li><a href="/tags/M0/" title="M0">M0<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/V4L2/" title="V4L2">V4L2<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/sqlite3/" title="sqlite3">sqlite3<sup>1</sup></a></li>
+				<li><a href="/tags/进程/" title="进程">进程<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/进程/" title="进程">进程<sup>1</sup></a></li>
+				<li><a href="/tags/M0/" title="M0">M0<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/sqlite3/" title="sqlite3">sqlite3<sup>1</sup></a></li>
 			
 		
 			
